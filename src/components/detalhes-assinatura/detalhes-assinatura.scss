@@ -1,0 +1,63 @@
+.nopaper-detalhes-assinatura {
+
+  min-height: 100%;
+  position: relative;
+
+  .badge {
+    max-width: 180px;
+  }
+
+  .badge-secondary {
+    color: #fff !important;
+    background-color: #6c757d !important;
+  }
+
+  table, td {
+    border-collapse: collapse;
+  }
+  thead {
+    display: table;
+    width: calc(100% - 17px);
+  }
+
+  tbody {
+    display: block;
+    max-height: 150px;
+    overflow-y: scroll;
+    padding-right: 6px;
+  }
+
+  th, td {
+    width: 33.33%;
+    word-break: break-all;
+  }
+
+  tr {
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  tr th:nth-child(1),
+  tr td:nth-child(1) {
+    width: 6%;
+    max-width: 6%;
+  }
+  tr th:nth-child(2),
+  tr td:nth-child(2),
+  tr td:nth-child(2) > div {
+    width: 59%;
+    max-width: 59%;
+  }
+  tr th:nth-child(3),
+  tr td:nth-child(3) {
+    width: 35%;
+    max-width: 35%;
+  }
+
+  td img {
+    width: 22px;
+    height: 22px;
+  }
+
+}

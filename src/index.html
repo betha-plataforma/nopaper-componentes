@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Playground NoPaper Components</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@mdi/font@5.0.45/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@betha-plataforma/theme-bootstrap4/dist/theme-bootstrap4.css">
+
+    <link href="assets/fonts.css" rel="stylesheet">
+
+    <script type="module" src="/build/nopaper-componentes.esm.js"></script>
+    <script nomodule src="/build/nopaper-componentes.js"></script>
+
+    <script src="https://suite.test.bethacloud.com.br/env.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <form name="form">
+        <div class="card-body">
+          <h3 class="text-center">Playground</h3>
+
+            <div class="row">
+                <div class="col-6">
+                    <div style="border: 1px solid red; min-height: 150px; height: 100%" class=" pb-3 pt-3">
+<!--                        <nopaper-detalhes-assinatura>-->
+                        <nopaper-detalhes-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0">
+                        </nopaper-detalhes-assinatura>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div style="border: 1px solid green" class="p-3">
+                        <table class="table table-hover table-card table-responsive">
+                            <thead>
+                            <tr>
+                                <th style="width: 40%;"><span>Nome</span></th>
+                                <th style="width: 40%;"><span>Situação</span></th>
+                                <th style="width: 20%;"><span>Assinatura</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Documento 0</td>
+                                <td>ASSINADO</td>
+                                <td>
+                                    <div>
+                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
+                                                            situacao="ASSINADO">
+                                        </nopaper-assinatura>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Documento 1</td>
+                                <td>PENDENTE_ASSINATURA</td>
+                                <td>
+                                    <div>
+                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
+                                                            situacao="PENDENTE_ASSINATURA">
+                                        </nopaper-assinatura>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Documento 2</td>
+                                <td>PARCIALMENTE_ASSINADO</td>
+                                <td>
+                                    <div>
+                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
+                                                            situacao="PARCIALMENTE_ASSINADO">
+                                        </nopaper-assinatura>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Documento 3</td>
+                                <td>ASSINATURA_RECUSADA</td>
+                                <td>
+                                    <div>
+                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
+                                                            situacao="ASSINATURA_RECUSADA">
+                                        </nopaper-assinatura>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Documento 4</td>
+                                <td>PROBLEMA_ASSINATURA</td>
+                                <td>
+                                    <div>
+                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
+                                                            situacao="PROBLEMA_ASSINATURA">
+                                        </nopaper-assinatura>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+<script>
+    function getAuthorization() {
+        return {
+            accessToken: '7d8dac38-28a9-4f2c-baff-58c2a679b771',
+            userAccess: 'vfcwrS04_MXFkAQaMNbrGA=='
+        };
+    }
+
+    async function handleUnauthorizedAccess() {
+        return new Promise(function (resolve) {
+            setTimeout(resolve, 3500);
+        });
+    }
+
+    document.querySelector('nopaper-detalhes-assinatura').authorization = {
+        getAuthorization: getAuthorization,
+        handleUnauthorizedAccess: handleUnauthorizedAccess,
+    };
+</script>
+</html>
