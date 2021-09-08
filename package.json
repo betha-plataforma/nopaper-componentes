@@ -1,6 +1,6 @@
 {
   "name": "@betha-plataforma/nopaper-componentes",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Coleção de Web Components NoPaper",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -40,5 +40,25 @@
   "dependencies": {
     "@mdi/font": "~5.0.45"
   },
-  "license": "MIT"
+  "keywords": [
+    "estrutura componentes",
+    "web components",
+    "stenciljs",
+    "plataforma",
+    "betha cloud"
+  ],
+  "author": {
+    "name": "Plataforma Betha Cloud",
+    "email": "ti.plataforma@betha.com.br",
+    "url": "https://plataforma.betha.cloud/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/betha-plataforma/nopaper-componentes.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/betha-plataforma/nopaper-componentes/issues"
+  },
+  "homepage": "https://github.com/betha-plataforma/nopaper-componentes#readme"
 }
