@@ -5,11 +5,16 @@ export function isNill(value: any): boolean {
 
 export function formatDate(dateString) {
     const isoDate = new Date(dateString);
-    // console.warn(dateString);
-    // console.warn(isoDate);
     const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
     const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }`;
     return `${ date } às ${ hours }`;
+}
+
+export function formatDateHtml(dateString) {
+    const isoDate = new Date(dateString);
+    const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
+    const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }:${ addZero(isoDate.getSeconds()) }`;
+    return `<span>${ date }</span><br><small class="text-muted">às ${ hours }</small>`;
 }
 
 function addZero(num) {

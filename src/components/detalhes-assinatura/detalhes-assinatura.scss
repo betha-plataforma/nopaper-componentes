@@ -12,6 +12,10 @@
     background-color: #6c757d !important;
   }
 
+  .card-body {
+    padding: 12px;
+  }
+
   table, td {
     border-collapse: collapse;
   }
@@ -29,7 +33,7 @@
 
   th, td {
     width: 33.33%;
-    word-break: break-all;
+    //word-break: break-all;
   }
 
   tr {
@@ -44,15 +48,26 @@
     max-width: 6%;
   }
   tr th:nth-child(2),
-  tr td:nth-child(2),
-  tr td:nth-child(2) > div {
-    width: 59%;
-    max-width: 59%;
+  tr td:nth-child(2) {
+    width: 36%;
+    // Trick for text-truncate works
+    max-width: 0;
   }
   tr th:nth-child(3),
+  tr td:nth-child(3),
+  tr td:nth-child(3) > div {
+    width: 22%;
+    max-width: 22%;
+  }
+  tr th:nth-child(4),
+  tr td:nth-child(4) {
+    width: 37%;
+    max-width: 37%;
+  }
+
   tr td:nth-child(3) {
-    width: 35%;
-    max-width: 35%;
+    // Tamanho mínimo da coluna de data quando está vazia
+    //height: 45px;
   }
 
   td img {

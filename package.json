@@ -1,6 +1,6 @@
 {
   "name": "@betha-plataforma/nopaper-componentes",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Coleção de Web Components NoPaper",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -41,7 +41,8 @@
     "@mdi/font": "~5.0.45"
   },
   "keywords": [
-    "estrutura componentes",
+    "nopaper",
+    "nopaper componentes",
     "web components",
     "stenciljs",
     "plataforma",

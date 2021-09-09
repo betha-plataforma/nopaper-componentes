@@ -18,7 +18,7 @@ export const situacaoDocumento = new Map<string, any>([
         descricao: 'Aguardando assinante'
     }],
     ['PROBLEMA_ASSINATURA', {
-        css: 'mdi mdi-file-cancel tx__red',
+        css: 'mdi mdi-file-alert tx__red',
         descricao: 'EProblema na assinatura'
     }],
     ['ASSINATURA_RECUSADA', {

@@ -1,8 +1,8 @@
-import {h, Component, Prop, State, Watch} from '@stencil/core';
+import { h, Component, Prop, State, Watch } from '@stencil/core';
 
 import { isValidAuthorizationConfig } from '../../global/base-api';
 import { AuthorizationConfig } from '../../global/interfaces';
-import { formatDate, isNill } from '../../utils/utils';
+import {formatDate, formatDateHtml, isNill} from '../../utils/utils';
 import {
     DetalhesAssinaturaProps,
     situacaoAssinatura
@@ -194,7 +194,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             nome: assinante.usuarioInfo?.name || assinante.usuario,
             avatarUrl: this.getAvatarUrlAssinante(assinante.usuario),
             situacaoAssinatura: assinante.situacaoAssinatura.value,
-            dataAssinatura: formatDate(assinante.dataSituacao)
+            dataAssinatura: assinante.dataSituacao ? formatDateHtml(assinante.dataSituacao) : undefined
         };
     }
 
@@ -275,12 +275,13 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         return (
             <div class="row">
                 <div class="col">
-                    <div class={ assinantes.length > 3 ? 'scroll-list' : '' }>
+                    <div>
                         <table class="table table-hover table-card table-responsive">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th><span>Assinante</span></th>
+                                    <th><span>Assinado em</span></th>
                                     <th><span>Situação</span></th>
                                 </tr>
                             </thead>
@@ -300,13 +301,20 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 <td><span class="text-nowrap"><b>{ index + 1 }º</b></span></td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <img class="rounded-circle" src={ assinante.avatarUrl } alt={'Foto de ' + assinante.nome } />
+                        <div>
+                            <img class="rounded-circle" src={ assinante.avatarUrl } alt={'Foto de ' + assinante.nome } />
+                        </div>
                         <span class="text-truncate ml-2">{ assinante.nome }</span>
                     </div>
                 </td>
+                <td class="p-1">
+                    { (assinante.dataAssinatura)
+                        ? (<span innerHTML={ assinante.dataAssinatura }></span>)
+                        : (<span>--</span>) }
+                </td>
                 <td>
                     { (assinante.situacaoAssinatura !== 'ERRO') ? (
-                        <span class={ situacaoAssinatura.get(assinante.situacaoAssinatura).css } title={'Assinado ' + assinante.dataAssinatura }>
+                        <span class={ situacaoAssinatura.get(assinante.situacaoAssinatura).css }>
                             { situacaoAssinatura.get(assinante.situacaoAssinatura).descricao }
                         </span>
                     ) : (
