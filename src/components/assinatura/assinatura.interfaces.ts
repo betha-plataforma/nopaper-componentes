@@ -1,13 +1,12 @@
 
 export interface AssinaturaProps {
-    protocolo: string;
     situacao: string;
 }
 
 export const situacaoDocumento = new Map<string, any>([
     ['ASSINADO', {
         css: 'mdi mdi-file-check tx__green',
-        descricao: 'Assinatura realizada'
+        descricao: 'Documento assinado'
     }],
     ['PENDENTE_ASSINATURA', {
         css: 'mdi mdi-file-document-edit tx__yellow',
@@ -15,11 +14,11 @@ export const situacaoDocumento = new Map<string, any>([
     }],
     ['PARCIALMENTE_ASSINADO', {
         css: 'mdi mdi-file-document-edit tx__yellow',
-        descricao: 'Aguardando assinante'
+        descricao: 'Aguardando assinaturas'
     }],
     ['PROBLEMA_ASSINATURA', {
         css: 'mdi mdi-file-alert tx__red',
-        descricao: 'EProblema na assinatura'
+        descricao: 'Problema na assinatura'
     }],
     ['ASSINATURA_RECUSADA', {
         css: 'mdi mdi-file-cancel tx__red',

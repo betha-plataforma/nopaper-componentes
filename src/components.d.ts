@@ -8,7 +8,6 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AuthorizationConfig } from "./global/interfaces";
 export namespace Components {
     interface NopaperAssinatura {
-        "protocolo": string;
         "situacao": string;
     }
     interface NopaperDetalhesAssinatura {
@@ -38,7 +37,6 @@ declare global {
 }
 declare namespace LocalJSX {
     interface NopaperAssinatura {
-        "protocolo"?: string;
         "situacao"?: string;
     }
     interface NopaperDetalhesAssinatura {

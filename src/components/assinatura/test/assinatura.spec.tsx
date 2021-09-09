@@ -22,11 +22,9 @@ describe('nopaper-assinatura', () => {
         // Assert
         expect(page.root).toEqualLightHtml(`
             <nopaper-assinatura situacao="PENDENTE_ASSINATURA">
-                <div class="nopaper-assinatura">
-                    <button class="btn btn-link">
-                        <i class="mdi mdi-file-document-edit tx__yellow"></i>
-                    </button>
-                </div>
+                <span title="Assinaturas não iniciadas. Visualize a lista dos assinantes">
+                    <i class="mdi mdi-file-document-edit tx__yellow"></i>
+                </span>
             </nopaper-assinatura>
         `);
     });

@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property    | Attribute   | Description | Type     | Default     |
-| ----------- | ----------- | ----------- | -------- | ----------- |
-| `protocolo` | `protocolo` |             | `string` | `undefined` |
-| `situacao`  | `situacao`  |             | `string` | `undefined` |
+| Property   | Attribute  | Description | Type     | Default     |
+| ---------- | ---------- | ----------- | -------- | ----------- |
+| `situacao` | `situacao` |             | `string` | `undefined` |
 
 
 ----------------------------------------------

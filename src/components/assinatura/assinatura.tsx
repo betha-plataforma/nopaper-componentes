@@ -12,22 +12,13 @@ export class Assinatura implements AssinaturaProps {
     /**
      *
      */
-    @Prop() readonly protocolo: string;
-    /**
-     *
-     */
     @Prop() readonly situacao: string;
-
-    protected componentWillLoad() {
-    }
 
     protected render(): any {
         return (
-            <div class="nopaper-assinatura">
-                <button class="btn btn-link">
-                    <i class={ situacaoDocumento.get(this.situacao)?.css }></i>
-                </button>
-            </div>
+            <span title={ situacaoDocumento.get(this.situacao)?.descricao + '. Visualize a lista dos assinantes' }>
+                <i class={ situacaoDocumento.get(this.situacao)?.css } />
+            </span>
         );
     }
 

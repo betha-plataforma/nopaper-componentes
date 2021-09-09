@@ -1,3 +1,4 @@
+
 .nopaper-detalhes-assinatura {
 
   min-height: 100%;
@@ -33,7 +34,6 @@
 
   th, td {
     width: 33.33%;
-    //word-break: break-all;
   }
 
   tr {
@@ -63,11 +63,6 @@
   tr td:nth-child(4) {
     width: 37%;
     max-width: 37%;
-  }
-
-  tr td:nth-child(3) {
-    // Tamanho mínimo da coluna de data quando está vazia
-    //height: 45px;
   }
 
   td img {

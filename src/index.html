@@ -8,6 +8,7 @@
     <title>Playground NoPaper Components</title>
 
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.6/dist/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="https://unpkg.com/@mdi/font@5.0.45/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@betha-plataforma/theme-bootstrap4/dist/theme-bootstrap4.css">
 
@@ -26,14 +27,14 @@
           <h3 class="text-center">Playground</h3>
 
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6">
                     <div style="border: 1px solid red; min-height: 150px; height: 100%" class=" pb-3 pt-3">
 <!--                        <nopaper-detalhes-assinatura>-->
                         <nopaper-detalhes-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0">
                         </nopaper-detalhes-assinatura>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     <div style="border: 1px solid green" class="p-3">
                         <table class="table table-hover table-card table-responsive">
                             <thead>
@@ -48,55 +49,50 @@
                                 <td>Documento 0</td>
                                 <td>ASSINADO</td>
                                 <td>
-                                    <div>
-                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
-                                                            situacao="ASSINADO">
+                                    <button class="btn btn-link">
+                                        <nopaper-assinatura situacao="ASSINADO">
                                         </nopaper-assinatura>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Documento 1</td>
                                 <td>PENDENTE_ASSINATURA</td>
                                 <td>
-                                    <div>
-                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
-                                                            situacao="PENDENTE_ASSINATURA">
+                                    <button class="btn btn-link">
+                                        <nopaper-assinatura situacao="PENDENTE_ASSINATURA">
                                         </nopaper-assinatura>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Documento 2</td>
                                 <td>PARCIALMENTE_ASSINADO</td>
                                 <td>
-                                    <div>
-                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
-                                                            situacao="PARCIALMENTE_ASSINADO">
+                                    <button class="btn btn-link">
+                                        <nopaper-assinatura situacao="PARCIALMENTE_ASSINADO">
                                         </nopaper-assinatura>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Documento 3</td>
                                 <td>ASSINATURA_RECUSADA</td>
                                 <td>
-                                    <div>
-                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
-                                                            situacao="ASSINATURA_RECUSADA">
+                                    <button class="btn btn-link">
+                                        <nopaper-assinatura situacao="ASSINATURA_RECUSADA">
                                         </nopaper-assinatura>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Documento 4</td>
                                 <td>PROBLEMA_ASSINATURA</td>
                                 <td>
-                                    <div>
-                                        <nopaper-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0"
-                                                            situacao="PROBLEMA_ASSINATURA">
+                                    <button class="btn btn-link">
+                                        <nopaper-assinatura situacao="PROBLEMA_ASSINATURA">
                                         </nopaper-assinatura>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -112,7 +108,7 @@
 <script>
     function getAuthorization() {
         return {
-            accessToken: '4f2bfd95-2e5a-4a63-a683-18d9c56d5297',
+            accessToken: 'ba5e0090-5b97-47ba-a31c-c885309b784b',
             userAccess: 'vfcwrS04_MXFkAQaMNbrGA=='
         };
     }
