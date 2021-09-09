@@ -19,7 +19,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     private assinaturaService: DetalhesAssinaturaService;
 
     @State() loading = false;
-    @State() error = false;
     @State() unavailable = false;
     @State() invalid = false;
     @State() documento: any;
@@ -43,19 +42,12 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     @Watch('authorization')
     watchAuthorization() {
-        console.warn('watchAuthorization');
         this.fetch();
     }
 
     connectedCallback() {
-        console.warn('connectedCallback');
         this.fetch();
     }
-
-    // protected componentWillLoad() {
-    //     console.warn('componentWillLoad');
-    //     this.fetch();
-    // }
 
     protected render(): any {
         return (
@@ -69,10 +61,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 { (this.unavailable && !this.loading) && (
                     this.getUnavailable()
                 )}
-                { (this.error && !this.loading) && (
-                    this.getError()
-                )}
-                { ((!this.loading && !this.documento) && (!this.unavailable && !this.error && !this.invalid)) && (
+                { ((!this.loading && !this.documento) && (!this.unavailable && !this.invalid)) && (
                     this.getNotFoundDocumento()
                 )}
                 { (this.documento) && (
@@ -165,13 +154,12 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private onResponse(response) {
-        this.error = false;
         this.unavailable = false;
         response.json().then(pageDocumento => this.onSuccess(pageDocumento));
     }
 
     private onError() {
-        this.error = true;
+        this.unavailable = true;
         this.loading = false;
     }
 
@@ -227,10 +215,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     private getUnavailable() {
         return (<span>O serviço de assinaturas está temporariamente indisponível</span>);
-    }
-
-    private getError() {
-        return (<span>Ocorreu um erro ao processar a requisição</span>);
     }
 
     private getEmptyAssinantes() {
