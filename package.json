@@ -23,6 +23,7 @@
     "lint": "eslint --ext .js,.ts,.tsx src/"
   },
   "devDependencies": {
+    "@mdi/font": "~5.0.45",
     "@stencil/core": "~1.16.4",
     "@stencil/eslint-plugin": "^0.3.1",
     "@stencil/sass": "^1.3.1",
@@ -38,7 +39,6 @@
     "puppeteer": "2.1.0"
   },
   "dependencies": {
-    "@mdi/font": "~5.0.45"
   },
   "keywords": [
     "nopaper",
