@@ -172,8 +172,8 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         return `${ this.getUsuariosBaseUrl() }/api/usuarios/${ idUsuario }/photo?access_token=${ this.authorization.getAuthorization().accessToken }`;
     }
 
-    private getDownloadUrlDocumento(url) {
-        return `${ url }?access_token=${ this.authorization.getAuthorization().accessToken }&disableDownload=true`;
+    private getDownloadUrlDocumento(url, disableDownload) {
+        return `${ url }?access_token=${ this.authorization.getAuthorization().accessToken }${ disableDownload ? '&disableDownload=true' : '' }`;
     }
 
     private transformaAssinante(assinante) {
@@ -193,7 +193,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             assinantes: documento.secoesAssinaturas && documento.secoesAssinaturas.length
                 ? documento.secoesAssinaturas.map(secaoAssinatura => this.transformaAssinante(secaoAssinatura.assinantes[0]))
                 : [],
-            downloadUrl: this.getDownloadUrlDocumento(documento.urlDownloadFront)
+            downloadUrl: this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF')
         };
     }
 
