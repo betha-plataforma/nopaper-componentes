@@ -1,8 +1,9 @@
+@import '~@mdi/font/css/materialdesignicons.min.css'; // Usando svg porque shadow dom não tem suporte a custom fonts
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~@betha-plataforma/theme-bootstrap4/dist/theme-bootstrap4.min.css';
+@import '../../assets/global';
 
-.nopaper-detalhes-assinatura {
-
-  min-height: 100%;
-  position: relative;
+:host {
 
   .badge {
     max-width: 180px;

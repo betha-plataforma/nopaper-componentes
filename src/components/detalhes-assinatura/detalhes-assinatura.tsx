@@ -2,7 +2,7 @@ import { h, Component, Prop, State, Watch } from '@stencil/core';
 
 import { isValidAuthorizationConfig } from '../../global/base-api';
 import { AuthorizationConfig } from '../../global/interfaces';
-import {formatDate, formatDateHtml, isNill} from '../../utils/utils';
+import { formatDate, formatDateHtml, isNill } from '../../utils/utils';
 import {
     DetalhesAssinaturaProps,
     situacaoAssinatura
@@ -12,7 +12,7 @@ import { DetalhesAssinaturaService }  from './detalhes-assinatura.service';
 @Component({
     tag: 'nopaper-detalhes-assinatura',
     styleUrl: 'detalhes-assinatura.scss',
-    shadow: false
+    shadow: true
 })
 export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
@@ -245,8 +245,14 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     <div class="card border-0 bg-secondary mb-2 mt-2">
                         <div class="card-body">
                             <a href={ this.documento.downloadUrl } target="_blank">
-                                <i class="mdi mdi-file-document-outline mr-1"></i>
-                                { this.documento.nome }
+                                {/*<i class="mdi mdi-file-document-outline mr-1"></i>*/}
+                                {/*Usando svg porque shadow dom não tem suporte a custom fonts*/}
+                                <span class="d-flex">
+                                    <svg class="mr-1" viewBox="0 0 24 24" width="16" height="16">
+                                        <path fill="currentColor" d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                                    </svg>
+                                    { this.documento.nome }
+                                </span>
                             </a>
                         </div>
                     </div>
@@ -302,8 +308,12 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                             { situacaoAssinatura.get(assinante.situacaoAssinatura).descricao }
                         </span>
                     ) : (
-                        <span class="text-danger">
-                            <i class="mdi mdi-alert mr-1"></i>
+                        <span class="text-danger d-flex justify-content-start">
+                            {/*<i class="mdi mdi-alert mr-1"></i>*/}
+                            {/*Usando svg porque shadow dom não tem suporte a custom fonts*/}
+                            <svg class="mr-1" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" />
+                            </svg>
                             { situacaoAssinatura.get(assinante.situacaoAssinatura).descricao }
                         </span>
                     )}
