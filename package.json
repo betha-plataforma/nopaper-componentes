@@ -39,6 +39,8 @@
     "puppeteer": "2.1.0"
   },
   "dependencies": {
+    "bootstrap": "4.5.3",
+    "@betha-plataforma/theme-bootstrap4": "^1.1.0"
   },
   "keywords": [
     "nopaper",

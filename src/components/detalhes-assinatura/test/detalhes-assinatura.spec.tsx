@@ -50,7 +50,7 @@ describe('nopaper-detalhes-assinatura', () => {
         // Assert
         const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
         expect(detalhesAssinaturaElement.authorization).toBeUndefined();
-        expect(detalhesAssinaturaElement.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
     });
 
     it('exibe texto de indisponibilidade se endereco da api não for informado', async () => {
@@ -61,7 +61,7 @@ describe('nopaper-detalhes-assinatura', () => {
         const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
         expect(detalhesAssinaturaElement.assinaturaBaseUrl).toBeUndefined();
         expect(detalhesAssinaturaElement.usuariosBaseUrl).toBeUndefined();
-        expect(detalhesAssinaturaElement.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
     });
 
     it('exibe texto de indisponibilidade caso ocorra erro na requisição', async () => {
@@ -80,7 +80,7 @@ describe('nopaper-detalhes-assinatura', () => {
 
         // Assert
         expect(detalhesAssinaturaElement.authorization).toBeDefined();
-        expect(detalhesAssinaturaElement.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/O serviço de assinaturas está temporariamente indisponível/);
     });
 
     it('nao exibe texto de indisponibilidade caso authorization e endereco da api estiverem informados', async () => {
@@ -104,7 +104,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(detalhesAssinaturaElement.authorization).toBeDefined();
         expect(detalhesAssinaturaElement.assinaturaBaseUrl).toBeDefined();
         expect(detalhesAssinaturaElement.usuariosBaseUrl).toBeDefined();
-        expect(detalhesAssinaturaElement.textContent).not.toMatch(/O serviço de assinaturas está temporariamente indisponível/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).not.toMatch(/O serviço de assinaturas está temporariamente indisponível/);
     });
 
     it('exibe texto de assinatura não encontrada para o protocolo', async () => {
@@ -120,7 +120,7 @@ describe('nopaper-detalhes-assinatura', () => {
 
         // Assert
         expect(detalhesAssinaturaElement.authorization).toBeDefined();
-        expect(detalhesAssinaturaElement.textContent).toMatch(/Não foi encontrado documento para o protocolo/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/Não foi encontrado documento para o protocolo/);
     });
 
     it('exibe texto de protocolo inválido', async () => {
@@ -136,7 +136,7 @@ describe('nopaper-detalhes-assinatura', () => {
 
         // Assert
         expect(detalhesAssinaturaElement.authorization).toBeDefined();
-        expect(detalhesAssinaturaElement.textContent).toMatch(/Protocolo de assinatura inválido/);
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/Protocolo de assinatura inválido/);
     });
 
 });

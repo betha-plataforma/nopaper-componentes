@@ -42,36 +42,15 @@ yarn add @betha-plataforma/nopaper-componentes
 
 ### Fonte
 
-Deve conter a fonte [**Open Sans**](https://fonts.google.com/specimen/Open+Sans?selection.family=Open+Sans) instalada. 
-
-- O [**@betha-plataforma/theme-bootstrap4**](https://github.com/betha-plataforma/theme-bootstrap4) já possui essa fonte e suas variações.
-
-Caso não utilize o framework acima, é possível obter as definições nos arquivos de distribuição ao instalar este projeto. 
+O componente utilizará a fonte herdada pelo documento, caso não utilize nenhuma fonte customizada, é possível obter as definições padrões nos arquivos de distribuição ao instalar este projeto. 
 
 ```html
 <link rel="stylesheet" href="https://unpkg.com/@betha-plataforma/nopaper-componentes/dist/collection/assets/fonts.css">
 ```
 
-### Ícones
-
-Deve conter a fonte [**Material Design Icons**](http://materialdesignicons.com/) instalada
-
-- A versão suportada é a [**5.0.45**](https://github.com/Templarian/MaterialDesign)
-- [Neste link](http://materialdesignicons.com/cdn/5.0.45/) está a tabela de referência de ícones disponíveis
-
-```html
-<link rel="stylesheet" href="https://unpkg.com/@mdi/font@5.0.45/css/materialdesignicons.min.css">
-```
-
-*Essa biblioteca de ícones pode ser instalada através de um gerenciador de pacotes `npm install @mdi/font@5.0.45`*
-
 ### Estilos
 
-Os estilos globais da biblioteca devem ser importados
-
-```html
-<link rel="stylesheet" href="https://unpkg.com/@betha-plataforma/nopaper-componentes/dist/nopaper-componentes/nopaper-componentes.css">
-```
+Os componentes NoPaper utilizam o aspecto de encapsulação para os estilos usando _[shadow dom](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM)_, portanto cada elemento irá portar todo o estilo necessário.
 
 ### Registrando componentes
 
