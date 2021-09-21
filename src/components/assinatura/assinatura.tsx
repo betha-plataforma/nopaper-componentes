@@ -18,9 +18,7 @@ export class Assinatura implements AssinaturaProps {
         return (
             <span
                 title={ situacaoDocumento.get(this.situacao)?.descricao }
-                innerHTML={ situacaoDocumento.get(this.situacao)?.svg }
-                class="d-flex">
-                {/*<i class={ situacaoDocumento.get(this.situacao)?.css } />*/}
+                innerHTML={ situacaoDocumento.get(this.situacao)?.svg }>
             </span>
         );
     }
