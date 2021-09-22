@@ -298,7 +298,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     </div>
                 </td>
                 <td class="p-1">
-                    { (assinante.dataAssinatura)
+                    { (assinante.dataAssinatura && assinante.situacaoAssinatura === 'ASSINADO')
                         ? (<span innerHTML={ assinante.dataAssinatura }></span>)
                         : (<span>--</span>) }
                 </td>
