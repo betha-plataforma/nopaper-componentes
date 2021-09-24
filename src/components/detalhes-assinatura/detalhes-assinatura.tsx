@@ -40,14 +40,18 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      */
     @Prop() readonly usuariosBaseUrl?: string;
 
-    @Watch('authorization')
-    watchAuthorization() {
+    @Watch('protocolo')
+    watchProtocolo() {
         this.fetch();
     }
 
-    connectedCallback() {
-        this.fetch();
+    componentWillLoad() {
+        this.watchProtocolo();
     }
+
+    // connectedCallback() {
+    //     this.fetch();
+    // }
 
     protected render(): any {
         return (
@@ -97,7 +101,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return;
         }
         const uuidRegExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-        if (this.protocolo === undefined || !uuidRegExp.test(this.protocolo)) {
+        if (isNill(this.protocolo) || !uuidRegExp.test(this.protocolo)) {
             console.warn('[nopaper-detalhes-assinatura] Protocolo de assinatura inválido');
             this.invalid = true;
             return;
