@@ -40,18 +40,24 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      */
     @Prop() readonly usuariosBaseUrl?: string;
 
+    private _protocolo: string;
+    private _authorization: AuthorizationConfig;
+
     @Watch('protocolo')
-    watchProtocolo() {
+    watchProtocolo(protocolo: string) {
+        this._protocolo = protocolo;
+    }
+
+    @Watch('authorization')
+    watchAuthorization(authorization: AuthorizationConfig) {
+        this._authorization = authorization;
         this.fetch();
     }
 
     componentWillLoad() {
-        this.watchProtocolo();
+        this.watchProtocolo(this.protocolo);
+        this.watchAuthorization(this.authorization);
     }
-
-    // connectedCallback() {
-    //     this.fetch();
-    // }
 
     protected render(): any {
         return (
@@ -85,6 +91,8 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private fetch() {
+        console.warn(this._protocolo);
+        console.warn(this._authorization);
         if (this.isAssinaturaServiceConfigMismatch()) {
             console.warn('[nopaper-detalhes-assinatura] O endereço do serviço de assinaturas deve ser informado. Consulte a documentação do componente.');
             this.unavailable = true;
@@ -101,15 +109,15 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return;
         }
         const uuidRegExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-        if (isNill(this.protocolo) || !uuidRegExp.test(this.protocolo)) {
+        if (isNill(this._protocolo) || !uuidRegExp.test(this._protocolo)) {
             console.warn('[nopaper-detalhes-assinatura] Protocolo de assinatura inválido');
             this.invalid = true;
             return;
         }
         this.unavailable = false;
         this.loading = true;
-        this.assinaturaService = new DetalhesAssinaturaService(this.authorization, this.getAssinaturaBaseUrl());
-        this.assinaturaService.getByProtocolo(this.protocolo)
+        this.assinaturaService = new DetalhesAssinaturaService(this._authorization, this.getAssinaturaBaseUrl());
+        this.assinaturaService.getByProtocolo(this._protocolo)
             .then(response => response.ok ? this.onResponse(response) : this.onError())
             .catch(() => this.onFailed());
     }
@@ -126,7 +134,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private isAuthorizationConfigMismatch() {
-        return !isValidAuthorizationConfig(this.authorization);
+        return !isValidAuthorizationConfig(this._authorization);
     }
 
     private getAssinaturaBaseUrl(): string {
@@ -173,11 +181,11 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private getAvatarUrlAssinante(idUsuario: string) {
-        return `${ this.getUsuariosBaseUrl() }/api/usuarios/${ idUsuario }/photo?access_token=${ this.authorization.getAuthorization().accessToken }`;
+        return `${ this.getUsuariosBaseUrl() }/api/usuarios/${ idUsuario }/photo?access_token=${ this._authorization.getAuthorization().accessToken }`;
     }
 
     private getDownloadUrlDocumento(url, disableDownload) {
-        return `${ url }?access_token=${ this.authorization.getAuthorization().accessToken }${ disableDownload ? '&disableDownload=true' : '' }`;
+        return `${ url }?access_token=${ this._authorization.getAuthorization().accessToken }${ disableDownload ? '&disableDownload=true' : '' }`;
     }
 
     private transformaAssinante(assinante) {
@@ -210,7 +218,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private getNotFoundDocumento() {
-        return (<span>Não foi encontrado documento para o protocolo <span class="text-nowrap">{ this.protocolo }</span>.</span>);
+        return (<span>Não foi encontrado documento para o protocolo <span class="text-nowrap">{ this._protocolo }</span>.</span>);
     }
 
     private getInvalid() {
