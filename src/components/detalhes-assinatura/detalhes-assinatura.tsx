@@ -45,11 +45,13 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     @Watch('protocolo')
     watchProtocolo(protocolo: string) {
+        console.warn('[nopaper-detalhes-assinatura] Watch protocolo ' + protocolo);
         this._protocolo = protocolo;
     }
 
     @Watch('authorization')
     watchAuthorization(authorization: AuthorizationConfig) {
+        console.warn('[nopaper-detalhes-assinatura] Watch authorization ', authorization);
         this._authorization = authorization;
         this.fetch();
     }

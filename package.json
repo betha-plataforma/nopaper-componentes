@@ -1,6 +1,6 @@
 {
   "name": "@betha-plataforma/nopaper-componentes",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Coleção de Web Components NoPaper",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
