@@ -1,7 +1,7 @@
 import { h, Component, Prop, State, Watch } from '@stencil/core';
 
 import { isValidAuthorizationConfig } from '../../global/base-api';
-import { AuthorizationConfig } from '../../global/interfaces';
+import {Authorization, AuthorizationConfig} from '../../global/interfaces';
 import { formatDate, formatDateHtml, isNill } from '../../utils/utils';
 import {
     DetalhesAssinaturaProps,
@@ -34,31 +34,52 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     /**
      *
      */
-    @Prop() readonly assinaturaBaseUrl?: string;
+    @Prop() readonly assinaturaBaseUrl: string;
     /**
      *
      */
-    @Prop() readonly usuariosBaseUrl?: string;
+    @Prop() readonly usuariosBaseUrl: string;
+    /**
+     *
+     */
+    @Prop() readonly accessToken: string;
+    /**
+     *
+     */
+    @Prop() readonly userAccess: string;
 
     private _protocolo: string;
     private _authorization: AuthorizationConfig;
+    private _accessToken: string;
+    private _userAccess: string;
 
     @Watch('protocolo')
     watchProtocolo(protocolo: string) {
-        console.warn('[nopaper-detalhes-assinatura] Watch protocolo ' + protocolo);
         this._protocolo = protocolo;
+        this.fetch();
     }
 
     @Watch('authorization')
     watchAuthorization(authorization: AuthorizationConfig) {
-        console.warn('[nopaper-detalhes-assinatura] Watch authorization ', authorization);
         this._authorization = authorization;
         this.fetch();
     }
 
+    @Watch('accessToken')
+    watchAccessToken(accessToken: string) {
+        this._accessToken = accessToken;
+    }
+
+    @Watch('userAccess')
+    watchUserAccess(userAccess: string) {
+        this._userAccess = userAccess;
+    }
+
     componentWillLoad() {
-        this.watchProtocolo(this.protocolo);
         this.watchAuthorization(this.authorization);
+        this.watchAccessToken(this.accessToken);
+        this.watchUserAccess(this.userAccess);
+        this.watchProtocolo(this.protocolo);
     }
 
     protected render(): any {
@@ -93,8 +114,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private fetch() {
-        console.warn(this._protocolo);
-        console.warn(this._authorization);
         if (this.isAssinaturaServiceConfigMismatch()) {
             console.warn('[nopaper-detalhes-assinatura] O endereço do serviço de assinaturas deve ser informado. Consulte a documentação do componente.');
             this.unavailable = true;
@@ -110,8 +129,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             this.unavailable = true;
             return;
         }
-        const uuidRegExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-        if (isNill(this._protocolo) || !uuidRegExp.test(this._protocolo)) {
+        if (this.isProtocoloInvalido()) {
             console.warn('[nopaper-detalhes-assinatura] Protocolo de assinatura inválido');
             this.invalid = true;
             return;
@@ -136,7 +154,29 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private isAuthorizationConfigMismatch() {
+        if (!isValidAuthorizationConfig(this._authorization)) {
+            if (!isNill(this._accessToken) && !isNill(this._userAccess)) {
+                const authorization = {
+                    accessToken: this._accessToken,
+                    userAccess: this._userAccess
+                };
+                this._authorization = {
+                    getAuthorization(): Authorization {
+                        return authorization;
+                    },
+                    handleUnauthorizedAccess(): Promise<void> {
+                        return Promise.resolve();
+                    }
+                };
+            }
+        }
+
         return !isValidAuthorizationConfig(this._authorization);
+    }
+
+    private isProtocoloInvalido() {
+        const uuidRegExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+        return isNill(this._protocolo) || !uuidRegExp.test(this._protocolo);
     }
 
     private getAssinaturaBaseUrl(): string {

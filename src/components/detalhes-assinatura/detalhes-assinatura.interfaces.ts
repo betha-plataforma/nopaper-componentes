@@ -1,7 +1,13 @@
+import { AuthorizationConfig } from '../../global/interfaces';
 
 
 export interface DetalhesAssinaturaProps {
     protocolo: string;
+    authorization: AuthorizationConfig;
+    assinaturaBaseUrl: string;
+    usuariosBaseUrl: string;
+    accessToken: string;
+    userAccess: string;
 }
 
 export const situacaoAssinatura = new Map<string, any>([

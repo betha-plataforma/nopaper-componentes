@@ -11,10 +11,12 @@ export namespace Components {
         "situacao": string;
     }
     interface NopaperDetalhesAssinatura {
-        "assinaturaBaseUrl"?: string;
+        "accessToken": string;
+        "assinaturaBaseUrl": string;
         "authorization": AuthorizationConfig;
         "protocolo": string;
-        "usuariosBaseUrl"?: string;
+        "userAccess": string;
+        "usuariosBaseUrl": string;
     }
 }
 declare global {
@@ -40,9 +42,11 @@ declare namespace LocalJSX {
         "situacao"?: string;
     }
     interface NopaperDetalhesAssinatura {
+        "accessToken"?: string;
         "assinaturaBaseUrl"?: string;
         "authorization"?: AuthorizationConfig;
         "protocolo"?: string;
+        "userAccess"?: string;
         "usuariosBaseUrl"?: string;
     }
     interface IntrinsicElements {
