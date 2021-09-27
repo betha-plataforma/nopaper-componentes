@@ -277,7 +277,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     <img src="../../assets/images/invalid.svg" alt="Invalid"/>
                 </div>
                 <span>
-                    { isNill(this.invalidProtocoloMessage) ? this.invalidProtocoloMessage : 'Protocolo de assinatura inválido' }
+                    { !isNill(this.invalidProtocoloMessage) ? this.invalidProtocoloMessage : 'Protocolo de assinatura inválido' }
                 </span>
             </div>
         );
