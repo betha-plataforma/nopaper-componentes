@@ -4,7 +4,9 @@
 
 :host {
 
-  min-height: 100px;
+  .nopaper-detalhes-assinatura {
+    min-height: 100px;
+  }
 
   h6 {
     font-size: 1em;
