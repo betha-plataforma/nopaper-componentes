@@ -15,6 +15,10 @@ export class Assinatura implements AssinaturaProps {
     @Prop() readonly situacao: string;
 
     protected render(): any {
+        return (this.getSvg());
+    }
+
+    private getSvg() {
         return (
             <span
                 title={ situacaoDocumento.get(this.situacao)?.descricao }

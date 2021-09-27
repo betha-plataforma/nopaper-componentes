@@ -76,7 +76,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     componentWillLoad() {
-        this.watchAuthorization(this.authorization);
         this.watchAccessToken(this.accessToken);
         this.watchUserAccess(this.userAccess);
         this.watchProtocolo(this.protocolo);
@@ -134,6 +133,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             this.invalid = true;
             return;
         }
+        this.invalid = false;
         this.unavailable = false;
         this.loading = true;
         this.assinaturaService = new DetalhesAssinaturaService(this._authorization, this.getAssinaturaBaseUrl());
