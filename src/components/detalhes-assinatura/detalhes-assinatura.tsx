@@ -1,7 +1,7 @@
 import { h, Component, Prop, State, Watch } from '@stencil/core';
 
 import { isValidAuthorizationConfig } from '../../global/base-api';
-import {Authorization, AuthorizationConfig} from '../../global/interfaces';
+import { Authorization, AuthorizationConfig } from '../../global/interfaces';
 import { formatDate, formatDateHtml, isNill } from '../../utils/utils';
 import {
     DetalhesAssinaturaProps,
@@ -47,6 +47,10 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      *
      */
     @Prop() readonly userAccess: string;
+    /**
+     *
+     */
+    @Prop() readonly invalidProtocoloMessage: string;
 
     private _protocolo: string;
     private _authorization: AuthorizationConfig;
@@ -62,20 +66,22 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     @Watch('authorization')
     watchAuthorization(authorization: AuthorizationConfig) {
         this._authorization = authorization;
-        this.fetch();
     }
 
     @Watch('accessToken')
     watchAccessToken(accessToken: string) {
         this._accessToken = accessToken;
+        this.buildAuthorization();
     }
 
     @Watch('userAccess')
     watchUserAccess(userAccess: string) {
         this._userAccess = userAccess;
+        this.buildAuthorization();
     }
 
     componentWillLoad() {
+        this.watchAuthorization(this.authorization);
         this.watchAccessToken(this.accessToken);
         this.watchUserAccess(this.userAccess);
         this.watchProtocolo(this.protocolo);
@@ -83,11 +89,11 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     protected render(): any {
         return (
-            <div class="d-flex justify-content-center align-items-center nopaper-detalhes-assinatura">
+            <div class="h-100 d-flex justify-content-center nopaper-detalhes-assinatura">
                 { this.loading && (
                     this.getSpinner()
                 )}
-                { (this.invalid && !this.loading) && (
+                { (this.invalid && (!this.loading && !this.unavailable)) && (
                     this.getInvalid()
                 )}
                 { (this.unavailable && !this.loading) && (
@@ -154,29 +160,30 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private isAuthorizationConfigMismatch() {
-        if (!isValidAuthorizationConfig(this._authorization)) {
-            if (!isNill(this._accessToken) && !isNill(this._userAccess)) {
-                const authorization = {
-                    accessToken: this._accessToken,
-                    userAccess: this._userAccess
-                };
-                this._authorization = {
-                    getAuthorization(): Authorization {
-                        return authorization;
-                    },
-                    handleUnauthorizedAccess(): Promise<void> {
-                        return Promise.resolve();
-                    }
-                };
-            }
-        }
-
         return !isValidAuthorizationConfig(this._authorization);
     }
 
+    private buildAuthorization() {
+        if (!isNill(this._accessToken) && !isNill(this._userAccess)) {
+            const authorization = {
+                accessToken: this._accessToken,
+                userAccess: this._userAccess
+            };
+            this._authorization = {
+                getAuthorization(): Authorization {
+                    return authorization;
+                },
+                handleUnauthorizedAccess(): Promise<void> {
+                    return Promise.resolve();
+                }
+            };
+        }
+    }
+
     private isProtocoloInvalido() {
-        const uuidRegExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-        return isNill(this._protocolo) || !uuidRegExp.test(this._protocolo);
+        return isNill(this._protocolo)
+            || ! /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
+                .test(this._protocolo);
     }
 
     private getAssinaturaBaseUrl(): string {
@@ -264,11 +271,28 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private getInvalid() {
-        return (<span>Protocolo de assinatura inválido</span>);
+        return (
+            <div class="invalid d-flex flex-column justify-content-center align-items-center text-center">
+                <div class="mb-2">
+                    <img src="../../assets/images/invalid.svg" alt="Invalid"/>
+                </div>
+                <span>
+                    { isNill(this.invalidProtocoloMessage) ? this.invalidProtocoloMessage : 'Protocolo de assinatura inválido' }
+                </span>
+            </div>
+        );
     }
 
     private getUnavailable() {
-        return (<span>O serviço de assinaturas está temporariamente indisponível</span>);
+        return (
+            <div class="unavailable d-flex flex-column justify-content-center align-items-center text-center">
+                <div class="mb-2">
+                    <img src="../../assets/images/unavailable.svg" alt="Unavailable"/>
+                </div>
+                <h6>O serviço de assinaturas está temporariamente indisponível</h6>
+                <small class="text-muted">Quando o serviço for restabelecido, a sua aplicação voltará a funcionar normalmente</small>
+            </div>
+        );
     }
 
     private getEmptyAssinantes() {

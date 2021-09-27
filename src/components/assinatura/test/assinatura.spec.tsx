@@ -49,4 +49,23 @@ describe('nopaper-assinatura', () => {
         expect(svgElement.style.display === 'block');
     });
 
+    it('component will not render twice', async () => {
+        // Arrange
+        await page.setContent('<nopaper-assinatura situacao="ASSINADO"></nopaper-assinatura>');
+
+        // Act
+        const assinatura: HTMLNopaperAssinaturaElement = page.doc.querySelector('nopaper-assinatura');
+        assinatura.setAttribute('situacao', 'PENDENTE_ASSINATURA');
+        await page.waitForChanges();
+
+        // Assert
+        expect(assinatura.situacao).toBe('PENDENTE_ASSINATURA');
+
+        // const iconElement = assinatura.querySelector('i');
+        // expect(iconElement.classList.contains('mdi-file-document-edit')).toBeTruthy();
+        expect(assinatura.querySelectorAll('svg').length === 1);
+        expect(page.root.querySelectorAll('svg').length === 1);
+        // expect(svgElement.style.display === 'block');
+    });
+
 });

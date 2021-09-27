@@ -14,6 +14,7 @@ export namespace Components {
         "accessToken": string;
         "assinaturaBaseUrl": string;
         "authorization": AuthorizationConfig;
+        "invalidProtocoloMessage": string;
         "protocolo": string;
         "userAccess": string;
         "usuariosBaseUrl": string;
@@ -45,6 +46,7 @@ declare namespace LocalJSX {
         "accessToken"?: string;
         "assinaturaBaseUrl"?: string;
         "authorization"?: AuthorizationConfig;
+        "invalidProtocoloMessage"?: string;
         "protocolo"?: string;
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;

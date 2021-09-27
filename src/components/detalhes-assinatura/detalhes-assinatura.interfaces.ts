@@ -8,6 +8,7 @@ export interface DetalhesAssinaturaProps {
     usuariosBaseUrl: string;
     accessToken: string;
     userAccess: string;
+    invalidProtocoloMessage: string;
 }
 
 export const situacaoAssinatura = new Map<string, any>([

@@ -28,9 +28,8 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="pb-3 pt-3" style="border: 1px solid red; min-height: 150px; height: 100%">
-<!--                        <nopaper-detalhes-assinatura>-->
-                        <nopaper-detalhes-assinatura protocolo="67931ef5-da63-477f-8d92-fd671c3447c0">
+                    <div class="pb-3 pt-3" style="border: 1px solid red; height: 100%">
+                        <nopaper-detalhes-assinatura>
                         </nopaper-detalhes-assinatura>
                     </div>
                 </div>
@@ -118,9 +117,13 @@
 <script>
     function getAuthorization() {
         return {
-            accessToken: 'a22e6d73-3bb8-451a-8dcc-276f1151a7ed',
-            userAccess: 'vfcwrS04_MXFkAQaMNbrGA=='
+            accessToken: '52c9cc54-4d90-43e4-93b3-5d6b59bbb4ef',
+            userAccess: 'iBEQCiCybYorNGoZqtc5JA=='
         };
+        // return {
+        //     accessToken: 'd5feccab-f56e-4c54-ae1a-a0a1d060acbf',
+        //     userAccess: 'ufEJjn5sjcM='
+        // };
     }
 
     async function handleUnauthorizedAccess() {
@@ -128,7 +131,9 @@
             setTimeout(resolve, 3500);
         });
     }
-
+    // document.querySelector('nopaper-detalhes-assinatura').accessToken = getAuthorization().accessToken;
+    // document.querySelector('nopaper-detalhes-assinatura').userAccess = getAuthorization().userAccess;
+    document.querySelector('nopaper-detalhes-assinatura').protocolo = "67931ef5-da63-477f-8d92-fd671c3447c1";
     document.querySelector('nopaper-detalhes-assinatura').authorization = {
         getAuthorization: getAuthorization,
         handleUnauthorizedAccess: handleUnauthorizedAccess,

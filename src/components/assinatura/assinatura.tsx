@@ -14,17 +14,11 @@ export class Assinatura implements AssinaturaProps {
      */
     @Prop() readonly situacao: string;
 
-    private element;
-
-    protected render(): any {
-        if (this.element) {
-            this.element = null;
-        }
-        this.element = this.getIcon();
-        return this.element;
+    componentWillUpdate() {
+        return false;
     }
 
-    private getIcon() {
+    protected render(): any {
         return (
             <span
                 title={ situacaoDocumento.get(this.situacao)?.descricao }

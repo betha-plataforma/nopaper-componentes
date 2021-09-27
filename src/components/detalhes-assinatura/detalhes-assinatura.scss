@@ -4,6 +4,12 @@
 
 :host {
 
+  min-height: 100px;
+
+  .unavailable img, .invalid img {
+    max-width: 120px;
+  }
+
   svg {
     margin: auto 0;
     display: block;

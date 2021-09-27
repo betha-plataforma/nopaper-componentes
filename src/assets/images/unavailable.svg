@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="94" height="84" viewBox="0 0 94 84">
+  <defs>
+    <clipPath id="clip-assinaturas-indisponivel">
+      <rect width="94" height="84"/>
+    </clipPath>
+  </defs>
+  <g id="assinaturas-indisponivel" clip-path="url(#clip-assinaturas-indisponivel)">
+    <g id="Grupo_10015" transform="translate(-192 -46.074)">
+      <path id="Caminho_6592" d="M4445.144,444.4h68.07a9.037,9.037,0,0,0,7.818-13.56L4487,372.034a9.037,9.037,0,0,0-15.641,0l-34.034,58.8A9.038,9.038,0,0,0,4445.144,444.4Z" transform="translate(-4240.597 -317.826)" fill="none" stroke="#a7c4e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+      <circle id="Elipse_728" cx="3.697" cy="3.697" r="3.697" transform="translate(235 104.326)" fill="#a7c4e7"/>
+      <line id="Linha_2500" y2="20.555" transform="translate(238.5 77.563)" fill="none" stroke="#a7c4e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

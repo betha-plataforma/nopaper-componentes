@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="94" height="119" viewBox="0 0 94 119">
+  <defs>
+    <clipPath id="clip-ilustração-processamento">
+      <rect width="94" height="119"/>
+    </clipPath>
+  </defs>
+  <g id="ilustração-processamento" clip-path="url(#clip-ilustração-processamento)">
+    <g id="Grupo_10007" transform="translate(1888.858 7101.611)">
+      <path id="Caminho_13" d="M8543.626,2727.894c.129.008.257.02.388.02H8563.3a6.221,6.221,0,0,0,6.221-6.221v-19.283c0-.131-.012-.259-.02-.387Z" transform="translate(-10430.484 -9803.049)" fill="#ecf7fb"/>
+      <path id="Caminho_14" d="M8620.4,2704.254h-50.465v18.476a6.22,6.22,0,0,1-6.222,6.22h-19.094v80.959a7.443,7.443,0,0,0,7.443,7.443h67.113a7.443,7.443,0,0,0,7.443-7.443v-99.435A6.221,6.221,0,0,0,8620.4,2704.254Z" transform="translate(-10431.065 -9804.355)" fill="#fff" stroke="#7faadc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Linha_13" x1="25.315" y2="24.697" transform="translate(-1886.448 -7100.102)" fill="#fff" stroke="#7faadc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Linha_2497" x2="50.72" transform="translate(-1870.807 -7051.704)" fill="none" stroke="#e1e3e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <line id="Linha_2498" x2="50.72" transform="translate(-1870.807 -7043.354)" fill="none" stroke="#e1e3e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <line id="Linha_2499" x2="50.72" transform="translate(-1870.807 -7035.003)" fill="none" stroke="#e1e3e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <path id="Caminho_16" d="M8543.672,2727.894c.128.008.256.02.387.02h19.284a6.221,6.221,0,0,0,6.22-6.221v-19.283c0-.131-.012-.259-.02-.387Z" transform="translate(-10430.512 -9803.049)" fill="none"/>
+      <path id="Caminho_17" d="M8620.442,2704.254h-50.466v18.476a6.219,6.219,0,0,1-6.22,6.22h-19.095v80.959a7.443,7.443,0,0,0,7.443,7.443h67.113a7.443,7.443,0,0,0,7.443-7.443v-99.435A6.221,6.221,0,0,0,8620.442,2704.254Z" transform="translate(-10431.091 -9804.355)" fill="none" stroke="#7faadc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Linha_18" x1="25.315" y2="24.697" transform="translate(-1886.429 -7100.102)" fill="none" stroke="#7faadc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <circle id="Elipse_727" cx="24.5" cy="24.5" r="24.5" transform="translate(-1837 -7030.611)" fill="#fff"/>
+      <path id="autorenew" d="M20.036,11.023v6.014l8.018-8.018L20.036,1V7.014A16.008,16.008,0,0,0,6.486,31.589l2.927-2.927a11.826,11.826,0,0,1-1.4-5.613A12.027,12.027,0,0,1,20.036,11.023m13.55,3.488L30.66,17.437a12.007,12.007,0,0,1-10.624,17.64V29.063l-8.018,8.018L20.036,45.1V39.086A16.008,16.008,0,0,0,33.587,14.51Z" transform="translate(-1832.231 -7029.058)" fill="#7faadc"/>
+      <path id="Caminho_2802" d="M8560.787,2764.094h-15.838v15.838Z" transform="translate(-10430.651 -9838.774)" fill="#f5f7fa"/>
+      <line id="Linha_2496" x2="14.522" transform="translate(-1870.807 -7060.054)" fill="none" stroke="#a7c4e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

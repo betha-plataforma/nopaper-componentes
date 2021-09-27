@@ -65,3 +65,12 @@ export const PAYLOAD =
     }
     ]
 };
+export const PAYLOAD_EMPY =
+{
+    content: [{
+        protocolo: '00000000-1111-2222-3333-4444444444',
+        nomeArquivo: 'Lorem Ipsum',
+        createdIn: '2021-08-01T15:05:00',
+        secoesAssinaturas: []
+    }]
+};
