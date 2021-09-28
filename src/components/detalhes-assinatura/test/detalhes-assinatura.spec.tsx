@@ -118,17 +118,15 @@ describe('nopaper-detalhes-assinatura', () => {
 
     it('exibe texto de protocolo inválido', async () => {
         // Act
-        await page.setContent(`
-            <nopaper-detalhes-assinatura 
-                access-token="${getMockAuthorization().getAuthorization().accessToken}" 
-                user-access="${getMockAuthorization().getAuthorization().userAccess}"
-                protocolo="uuidv4">
-            </nopaper-detalhes-assinatura>`);
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
         const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
 
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = 'uuidv4';
+        await page.waitForChanges();
+
         // Assert
-        expect(detalhesAssinaturaElement.accessToken).toBeDefined();
-        expect(detalhesAssinaturaElement.userAccess).toBeDefined();
+        expect(detalhesAssinaturaElement.authorization).toBeDefined();
         expect(detalhesAssinaturaElement.protocolo).toBeDefined();
         expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch(/Protocolo de assinatura inválido/);
     });

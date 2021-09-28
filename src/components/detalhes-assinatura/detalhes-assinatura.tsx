@@ -119,6 +119,8 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private fetch() {
+        this.invalid = false;
+        this.unavailable = false;
         if (this.isAssinaturaServiceConfigMismatch()) {
             console.warn('[nopaper-detalhes-assinatura] O endereço do serviço de assinaturas deve ser informado. Consulte a documentação do componente.');
             this.unavailable = true;
@@ -139,8 +141,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             this.invalid = true;
             return;
         }
-        this.invalid = false;
-        this.unavailable = false;
         this.loading = true;
         this.assinaturaService = new DetalhesAssinaturaService(this._authorization, this.getAssinaturaBaseUrl());
         this.assinaturaService.getByProtocolo(this._protocolo)
