@@ -16,6 +16,7 @@ export namespace Components {
         "authorization": AuthorizationConfig;
         "invalidProtocoloMessage": string;
         "protocolo": string;
+        "refresh": () => Promise<void>;
         "userAccess": string;
         "usuariosBaseUrl": string;
     }

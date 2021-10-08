@@ -1,4 +1,4 @@
-import { h, Component, Prop, State, Watch } from '@stencil/core';
+import { h, Component, Prop, State, Watch, Method } from '@stencil/core';
 
 import { isValidAuthorizationConfig } from '../../global/base-api';
 import { Authorization, AuthorizationConfig } from '../../global/interfaces';
@@ -80,6 +80,11 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         this.buildAuthorization();
     }
 
+    @Method()
+    async refresh() {
+        return this.fetch();
+    }
+
     componentWillLoad() {
         this.watchAuthorization(this.authorization);
         this.watchAccessToken(this.accessToken);
@@ -118,7 +123,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         );
     }
 
-    private fetch() {
+    private fetch(): void {
         this.invalid = false;
         this.unavailable = false;
         if (this.isAssinaturaServiceConfigMismatch()) {
@@ -267,7 +272,11 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     }
 
     private getNotFoundDocumento() {
-        return (<span>Não foi encontrado documento para o protocolo <span class="text-nowrap">{ this._protocolo }</span>.</span>);
+        return (
+            <div class="invalid d-flex flex-column justify-content-center align-items-center text-center">
+                <span>Não foi encontrado documento para o protocolo <span class="text-nowrap">{ this._protocolo }</span>.</span>
+            </div>
+        );
     }
 
     private getInvalid() {
@@ -353,7 +362,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     <small class="text-muted">Enviado em { this.documento.criadoEm }</small>
                 </div>
                 <div class="d-flex">
-                    <button class="btn btn-link btn-sm" onClick={() => this.fetch()} disabled={ this.loading }>
+                    <button class="btn btn-link btn-sm" onClick={() => this.refresh()} disabled={ this.loading }>
                         <svg viewBox="0 0 24 24" width="16" height="16">
                             <path fill="currentColor" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
                         </svg>
