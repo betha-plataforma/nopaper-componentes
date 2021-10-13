@@ -362,12 +362,14 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     <small class="text-muted">Enviado em { this.documento.criadoEm }</small>
                 </div>
                 <div class="d-flex">
-                    <button class="btn btn-link btn-sm" onClick={() => this.refresh()} disabled={ this.loading }>
-                        <svg viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
-                        </svg>
-                        &nbsp;
-                        <span>ATUALIZAR</span>
+                    <button class="btn btn-link" onClick={() => this.refresh()} disabled={ this.loading }>
+                        <span class="d-flex">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+                            </svg>
+                            &nbsp;
+                            ATUALIZAR
+                        </span>
                     </button>
                 </div>
             </div>
