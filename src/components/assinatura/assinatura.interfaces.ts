@@ -58,7 +58,7 @@ export const situacaoDocumento = new Map<string, any>([
         `,
         descricao: 'Assinatura recusada. Visualize a lista dos assinantes'
     }],
-    ['EXPIRADA', {
+    ['EXPIRADO', {
         css: 'mdi mdi-file-clock tx__red',
         svg: `
             <svg viewBox="0 0 24 24" width="14" height="14">
