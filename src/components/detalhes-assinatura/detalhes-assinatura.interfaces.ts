@@ -43,5 +43,9 @@ export const situacaoAssinatura = new Map<string, any>([
     ['ASSINATURA_EM_ANDAMENTO', {
         css: 'badge d-block ',
         descricao: 'Assinatura em andamento'
+    }],
+    ['EXPIRADA', {
+        css: 'badge d-block badge-danger',
+        descricao: 'Assinatura expirada'
     }]
 ]);
