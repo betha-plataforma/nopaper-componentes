@@ -3,7 +3,6 @@ import {Component, h, Prop, State, Watch} from '@stencil/core';
 @Component({
     tag: 'nopaper-documentos-natureza-pasta-link',
     styleUrl: '',
-    shadow: true
 })
 export class DocumentosNaturezaPastaLink {
 
@@ -27,13 +26,10 @@ export class DocumentosNaturezaPastaLink {
 
     private acessarPastaNatureza = () => {
         const natureza = this.navegacao.natureza;
-        const hashContexto = btoa(natureza.database + ':' + natureza.entidade);
+        const hashContexto = btoa(`${natureza.database}:${natureza.entidade}`);
 
-        const link = DocumentosNaturezaPastaLink.getHost() + '/#/entidade/' + hashContexto
-            + '/documentos/sistema/' + natureza.sistema
-            + '/natureza/' + natureza.identificador
-            + '?caminho=' + this.navegacao.caminho
-            + '&titulo=' + this.navegacao.titulo;
+        const link =
+            `${DocumentosNaturezaPastaLink.getHost()}/#/entidade/${hashContexto}/documentos/sistema/${natureza.sistema}/natureza/${natureza.identificador}?caminho=${this.navegacao.caminho}&titulo=${this.navegacao.titulo}`;
 
         window.open(link, '_blank');
     };
