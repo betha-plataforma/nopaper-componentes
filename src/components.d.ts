@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AuthorizationConfig } from "./global/interfaces";
+import { Propriedades } from "./components/documentos-natureza-pasta-link/documentos-natureza-pasta-link";
 export namespace Components {
     interface NopaperAssinatura {
         "situacao": string;
@@ -19,6 +20,12 @@ export namespace Components {
         "refresh": () => Promise<void>;
         "userAccess": string;
         "usuariosBaseUrl": string;
+    }
+    interface NopaperDocumentosNaturezaPastaLink {
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "propriedades": Propriedades;
     }
 }
 declare global {
@@ -34,9 +41,16 @@ declare global {
         prototype: HTMLNopaperDetalhesAssinaturaElement;
         new (): HTMLNopaperDetalhesAssinaturaElement;
     };
+    interface HTMLNopaperDocumentosNaturezaPastaLinkElement extends Components.NopaperDocumentosNaturezaPastaLink, HTMLStencilElement {
+    }
+    var HTMLNopaperDocumentosNaturezaPastaLinkElement: {
+        prototype: HTMLNopaperDocumentosNaturezaPastaLinkElement;
+        new (): HTMLNopaperDocumentosNaturezaPastaLinkElement;
+    };
     interface HTMLElementTagNameMap {
         "nopaper-assinatura": HTMLNopaperAssinaturaElement;
         "nopaper-detalhes-assinatura": HTMLNopaperDetalhesAssinaturaElement;
+        "nopaper-documentos-natureza-pasta-link": HTMLNopaperDocumentosNaturezaPastaLinkElement;
     }
 }
 declare namespace LocalJSX {
@@ -52,9 +66,16 @@ declare namespace LocalJSX {
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;
     }
+    interface NopaperDocumentosNaturezaPastaLink {
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "propriedades"?: Propriedades;
+    }
     interface IntrinsicElements {
         "nopaper-assinatura": NopaperAssinatura;
         "nopaper-detalhes-assinatura": NopaperDetalhesAssinatura;
+        "nopaper-documentos-natureza-pasta-link": NopaperDocumentosNaturezaPastaLink;
     }
 }
 export { LocalJSX as JSX };
@@ -63,6 +84,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "nopaper-assinatura": LocalJSX.NopaperAssinatura & JSXBase.HTMLAttributes<HTMLNopaperAssinaturaElement>;
             "nopaper-detalhes-assinatura": LocalJSX.NopaperDetalhesAssinatura & JSXBase.HTMLAttributes<HTMLNopaperDetalhesAssinaturaElement>;
+            "nopaper-documentos-natureza-pasta-link": LocalJSX.NopaperDocumentosNaturezaPastaLink & JSXBase.HTMLAttributes<HTMLNopaperDocumentosNaturezaPastaLinkElement>;
         }
     }
 }
