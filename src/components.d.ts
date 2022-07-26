@@ -6,7 +6,6 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AuthorizationConfig } from "./global/interfaces";
-import { Propriedades } from "./components/documentos-natureza-pasta-link/documentos-natureza-pasta-link";
 export namespace Components {
     interface NopaperAssinatura {
         "situacao": string;
@@ -25,7 +24,29 @@ export namespace Components {
         /**
           * TODO: renan.silvano - documentar
          */
-        "propriedades": Propriedades;
+        "caminho": string;
+        "cssClass": string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "database": number;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "entidade": number;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "identificador": string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "sistema": number;
+        "textoLink": string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "titulo": string;
     }
 }
 declare global {
@@ -70,7 +91,29 @@ declare namespace LocalJSX {
         /**
           * TODO: renan.silvano - documentar
          */
-        "propriedades"?: Propriedades;
+        "caminho"?: string;
+        "cssClass"?: string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "database"?: number;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "entidade"?: number;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "identificador"?: string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "sistema"?: number;
+        "textoLink"?: string;
+        /**
+          * TODO: renan.silvano - documentar
+         */
+        "titulo"?: string;
     }
     interface IntrinsicElements {
         "nopaper-assinatura": NopaperAssinatura;
