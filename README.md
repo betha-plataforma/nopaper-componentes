@@ -10,6 +10,7 @@ Compatível com qualquer stack front-end que utilize HTML, CSS e JavaScript.
 
 - [nopaper-detalhes-assinatura](http://github.com/betha-plataforma/nopaper-componentes/tree/master/src/components/detalhes-assinatura)
 - [nopaper-assinatura](http://github.com/betha-plataforma/nopaper-componentes/tree/master/src/components/assinatura)
+- [nopaper-documentos-natureza-pasta-link](http://github.com/betha-plataforma/nopaper-componentes/tree/master/src/components/documentos-natureza-pasta-link)
 
 ## Instalando
 

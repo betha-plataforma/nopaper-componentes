@@ -5,34 +5,50 @@ import {Component, h, Prop, State, Watch} from '@stencil/core';
     styleUrl: './documentos-natureza-pasta-link.scss',
 })
 export class DocumentosNaturezaPastaLink {
-
     /**
-     * TODO: renan.silvano - documentar
+     * Codigo do sistema ao qual a natureza pertence
+     * <br> Exemplo: `sistema="177"`
      */
     @Prop() readonly sistema: number;
     /**
-     * TODO: renan.silvano - documentar
+     * Identificador da natureza
+     * <br> Exemplo: `identificador="TAREFA"`
      */
     @Prop() readonly identificador: string;
     /**
-     * TODO: renan.silvano - documentar
+     * Caminho para a subpasta dentro da pasta da natureza
+     * <br> Exemplo: `caminho="subpasta/outra sub pasta"`
      */
     @Prop() readonly caminho: string = '';
     /**
-     * TODO: renan.silvano - documentar
+     * Titulo do documento que deve ser buscado
+     * <br> Exemplo: `titulo="titulo qualquer"`
      */
     @Prop() readonly titulo: string = '';
     /**
-     * TODO: renan.silvano - documentar
+     * Entidade para criação da hash de contexto
+     * <br> Exemplo: `entidade="1235"`
      */
     @Prop() readonly entidade: number;
     /**
-     * TODO: renan.silvano - documentar
+     * Database para criação da hash de contexto
+     * <br> Exemplo: `database="1235"`
      */
     @Prop() readonly database: number;
-
-    @Prop() readonly textoLink: string;
-
+    /**
+     * Texto apresentado no link
+     * <br> Exemplo: `texto-link="Não clique aqui"`
+     */
+    @Prop() readonly textoLink: string = 'Acessar em documentos';
+    /**
+     * Title apresentado no link
+     * <br> Exemplo: `title-link="Eu sou o title, você não é o title..."`
+     */
+    @Prop() readonly titleLink: string = 'Acessar em documentos';
+    /**
+     * Classes CSS que devem ser aplicadas diretamente ao link
+     * <br> Exemplo: `css-class="Não clique aqui"`
+     */
     @Prop() readonly cssClass: string;
 
     @State() navegacao = {} as Navegacao;
@@ -72,8 +88,13 @@ export class DocumentosNaturezaPastaLink {
     }
 
     @Watch('textoLink')
-    watchTextoLink(textoLink: string = 'Acessar em documentos') {
+    watchTextoLink(textoLink: string) {
         this.caracteristicasVisuais.textoLink = textoLink;
+    }
+
+    @Watch('titleLink')
+    watchTitleLink(titleLink: string) {
+        this.caracteristicasVisuais.titleLink = titleLink;
     }
 
     @Watch('cssClass')
@@ -89,12 +110,13 @@ export class DocumentosNaturezaPastaLink {
         this.watchEntidade(this.entidade);
         this.watchDatabase(this.database);
         this.watchTextoLink(this.textoLink);
+        this.watchTitleLink(this.titleLink);
         this.watchCssClass(this.cssClass);
     }
 
     protected render(): any {
         return (
-            <a onClick={this.acessar} class={this.caracteristicasVisuais.cssClass}> {this.caracteristicasVisuais.textoLink}
+            <a onClick={this.acessar} class={this.caracteristicasVisuais.cssClass} title={this.caracteristicasVisuais.titleLink}> {this.caracteristicasVisuais.textoLink}
             </a>
         );
     }
@@ -112,7 +134,7 @@ export class DocumentosNaturezaPastaLink {
         if ('___bth' in window) {
             return window['___bth'].envs.suite.documentos['ui/v1'].host;
         }
-        throw '___bth deve estar definido'; // TODO: renan.silvano - melhorar
+        throw '___bth deve estar definido em window';
     }
 }
 
@@ -130,5 +152,6 @@ export interface Contexto {
 
 export interface CaracteristicasVisuais {
     textoLink?: string;
+    titleLink?: string;
     cssClass?: string;
 }

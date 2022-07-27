@@ -22,29 +22,39 @@ export namespace Components {
     }
     interface NopaperDocumentosNaturezaPastaLink {
         /**
-          * TODO: renan.silvano - documentar
+          * Caminho para a subpasta dentro da pasta da natureza <br> Exemplo: `caminho="subpasta/outra sub pasta"`
          */
         "caminho": string;
+        /**
+          * Classes CSS que devem ser aplicadas diretamente ao link <br> Exemplo: `css-class="Não clique aqui"`
+         */
         "cssClass": string;
         /**
-          * TODO: renan.silvano - documentar
+          * Database para criação da hash de contexto <br> Exemplo: `database="1235"`
          */
         "database": number;
         /**
-          * TODO: renan.silvano - documentar
+          * Entidade para criação da hash de contexto <br> Exemplo: `entidade="1235"`
          */
         "entidade": number;
         /**
-          * TODO: renan.silvano - documentar
+          * Identificador da natureza <br> Exemplo: `identificador="TAREFA"`
          */
         "identificador": string;
         /**
-          * TODO: renan.silvano - documentar
+          * Codigo do sistema ao qual a natureza pertence <br> Exemplo: `sistema="177"`
          */
         "sistema": number;
+        /**
+          * Texto apresentado no link <br> Exemplo: `texto-link="Não clique aqui"`
+         */
         "textoLink": string;
         /**
-          * TODO: renan.silvano - documentar
+          * Title apresentado no link <br> Exemplo: `title-link="Eu sou o title, você não é o title..."`
+         */
+        "titleLink": string;
+        /**
+          * Titulo do documento que deve ser buscado <br> Exemplo: `titulo="titulo qualquer"`
          */
         "titulo": string;
     }
@@ -89,29 +99,39 @@ declare namespace LocalJSX {
     }
     interface NopaperDocumentosNaturezaPastaLink {
         /**
-          * TODO: renan.silvano - documentar
+          * Caminho para a subpasta dentro da pasta da natureza <br> Exemplo: `caminho="subpasta/outra sub pasta"`
          */
         "caminho"?: string;
+        /**
+          * Classes CSS que devem ser aplicadas diretamente ao link <br> Exemplo: `css-class="Não clique aqui"`
+         */
         "cssClass"?: string;
         /**
-          * TODO: renan.silvano - documentar
+          * Database para criação da hash de contexto <br> Exemplo: `database="1235"`
          */
         "database"?: number;
         /**
-          * TODO: renan.silvano - documentar
+          * Entidade para criação da hash de contexto <br> Exemplo: `entidade="1235"`
          */
         "entidade"?: number;
         /**
-          * TODO: renan.silvano - documentar
+          * Identificador da natureza <br> Exemplo: `identificador="TAREFA"`
          */
         "identificador"?: string;
         /**
-          * TODO: renan.silvano - documentar
+          * Codigo do sistema ao qual a natureza pertence <br> Exemplo: `sistema="177"`
          */
         "sistema"?: number;
+        /**
+          * Texto apresentado no link <br> Exemplo: `texto-link="Não clique aqui"`
+         */
         "textoLink"?: string;
         /**
-          * TODO: renan.silvano - documentar
+          * Title apresentado no link <br> Exemplo: `title-link="Eu sou o title, você não é o title..."`
+         */
+        "titleLink"?: string;
+        /**
+          * Titulo do documento que deve ser buscado <br> Exemplo: `titulo="titulo qualquer"`
          */
         "titulo"?: string;
     }
