@@ -14,7 +14,10 @@ export function formatDateHtml(dateString) {
     const isoDate = new Date(dateString);
     const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
     const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }:${ addZero(isoDate.getSeconds()) }`;
-    return `<span>${ date }</span><br><small class="text-muted">às ${ hours }</small>`;
+    return `
+        <span class="fs-13">${ date }</span>
+        <small class="text-muted text-nowrap fs-12">às ${ hours }</small>
+    `;
 }
 
 function addZero(num) {

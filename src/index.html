@@ -34,6 +34,12 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <div class="pb-3 pt-3" style="border: 1px solid yellow; height: 100%">
+                        <nopaper-detalhes-assinatura id="documentos" link-assinador exibir-link-para="gabriel.freitas">
+                        </nopaper-detalhes-assinatura>
+                    </div>
+                </div>
+                <div class="col-md-6">
                     <div style="border: 1px solid green" class="p-3">
                         <table class="table table-hover table-card table-responsive">
                             <thead>
@@ -137,8 +143,8 @@
 <script>
     function getAuthorization() {
         return {
-            accessToken: '76cb79b1-ef52-428e-9563-849dd9333338',
-            userAccess: 'CYln7kGXcYIRFsapxafc6Q=='
+            accessToken: '24b09da0-6b35-46f2-991f-f8debf5ac2e2',
+            userAccess: 'vfcwrS04_MXFkAQaMNbrGA=='
         };
         // return {
         //     accessToken: 'd5feccab-f56e-4c54-ae1a-a0a1d060acbf',
@@ -159,5 +165,11 @@
         handleUnauthorizedAccess: handleUnauthorizedAccess,
     };
     // setInterval(() => document.querySelector('nopaper-detalhes-assinatura').refresh(), 2000);
+    document.querySelector('nopaper-detalhes-assinatura#documentos').protocolo = "67931ef5-da63-477f-8d92-fd671c3447c1";
+    document.querySelector('nopaper-detalhes-assinatura#documentos').authorization = {
+        getAuthorization: getAuthorization,
+        handleUnauthorizedAccess: handleUnauthorizedAccess,
+    };
+    document.querySelector('nopaper-detalhes-assinatura#documentos').addEventListener('linkCopied', event => console.warn(event.detail));
 </script>
 </html>
