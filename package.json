@@ -36,11 +36,12 @@
     "eslint-plugin-react": "^7.19.0",
     "jest": "24.9.0",
     "jest-cli": "24.9.0",
-    "puppeteer": "2.1.0"
+    "puppeteer": "2.1.1"
   },
   "dependencies": {
+    "@betha-plataforma/theme-bootstrap4": "^1.1.0",
     "bootstrap": "4.5.3",
-    "@betha-plataforma/theme-bootstrap4": "^1.1.0"
+    "typescript": "^3.8.0"
   },
   "keywords": [
     "nopaper",
