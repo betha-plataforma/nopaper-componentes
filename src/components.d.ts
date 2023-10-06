@@ -20,6 +20,44 @@ export namespace Components {
         "userAccess": string;
         "usuariosBaseUrl": string;
     }
+    interface NopaperDocumentosNaturezaPastaLink {
+        /**
+          * Caminho para a subpasta dentro da pasta da natureza <br> Exemplo: `caminho="subpasta/outra sub pasta"`
+         */
+        "caminho": string;
+        /**
+          * Classes CSS que devem ser aplicadas diretamente ao link <br> Exemplo: `css-class="Não clique aqui"`
+         */
+        "cssClass": string;
+        /**
+          * Database para criação da hash de contexto <br> Exemplo: `database="1235"`
+         */
+        "database": number;
+        /**
+          * Entidade para criação da hash de contexto <br> Exemplo: `entidade="1235"`
+         */
+        "entidade": number;
+        /**
+          * Identificador da natureza <br> Exemplo: `identificador="TAREFA"`
+         */
+        "identificador": string;
+        /**
+          * Codigo do sistema ao qual a natureza pertence <br> Exemplo: `sistema="177"`
+         */
+        "sistema": number;
+        /**
+          * Texto apresentado no link <br> Exemplo: `texto-link="Não clique aqui"`
+         */
+        "textoLink": string;
+        /**
+          * Title apresentado no link <br> Exemplo: `title-link="Eu sou o title, você não é o title..."`
+         */
+        "titleLink": string;
+        /**
+          * Titulo do documento que deve ser buscado <br> Exemplo: `titulo="titulo qualquer"`
+         */
+        "titulo": string;
+    }
 }
 declare global {
     interface HTMLNopaperAssinaturaElement extends Components.NopaperAssinatura, HTMLStencilElement {
@@ -34,9 +72,16 @@ declare global {
         prototype: HTMLNopaperDetalhesAssinaturaElement;
         new (): HTMLNopaperDetalhesAssinaturaElement;
     };
+    interface HTMLNopaperDocumentosNaturezaPastaLinkElement extends Components.NopaperDocumentosNaturezaPastaLink, HTMLStencilElement {
+    }
+    var HTMLNopaperDocumentosNaturezaPastaLinkElement: {
+        prototype: HTMLNopaperDocumentosNaturezaPastaLinkElement;
+        new (): HTMLNopaperDocumentosNaturezaPastaLinkElement;
+    };
     interface HTMLElementTagNameMap {
         "nopaper-assinatura": HTMLNopaperAssinaturaElement;
         "nopaper-detalhes-assinatura": HTMLNopaperDetalhesAssinaturaElement;
+        "nopaper-documentos-natureza-pasta-link": HTMLNopaperDocumentosNaturezaPastaLinkElement;
     }
 }
 declare namespace LocalJSX {
@@ -52,9 +97,48 @@ declare namespace LocalJSX {
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;
     }
+    interface NopaperDocumentosNaturezaPastaLink {
+        /**
+          * Caminho para a subpasta dentro da pasta da natureza <br> Exemplo: `caminho="subpasta/outra sub pasta"`
+         */
+        "caminho"?: string;
+        /**
+          * Classes CSS que devem ser aplicadas diretamente ao link <br> Exemplo: `css-class="Não clique aqui"`
+         */
+        "cssClass"?: string;
+        /**
+          * Database para criação da hash de contexto <br> Exemplo: `database="1235"`
+         */
+        "database"?: number;
+        /**
+          * Entidade para criação da hash de contexto <br> Exemplo: `entidade="1235"`
+         */
+        "entidade"?: number;
+        /**
+          * Identificador da natureza <br> Exemplo: `identificador="TAREFA"`
+         */
+        "identificador"?: string;
+        /**
+          * Codigo do sistema ao qual a natureza pertence <br> Exemplo: `sistema="177"`
+         */
+        "sistema"?: number;
+        /**
+          * Texto apresentado no link <br> Exemplo: `texto-link="Não clique aqui"`
+         */
+        "textoLink"?: string;
+        /**
+          * Title apresentado no link <br> Exemplo: `title-link="Eu sou o title, você não é o title..."`
+         */
+        "titleLink"?: string;
+        /**
+          * Titulo do documento que deve ser buscado <br> Exemplo: `titulo="titulo qualquer"`
+         */
+        "titulo"?: string;
+    }
     interface IntrinsicElements {
         "nopaper-assinatura": NopaperAssinatura;
         "nopaper-detalhes-assinatura": NopaperDetalhesAssinatura;
+        "nopaper-documentos-natureza-pasta-link": NopaperDocumentosNaturezaPastaLink;
     }
 }
 export { LocalJSX as JSX };
@@ -63,6 +147,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "nopaper-assinatura": LocalJSX.NopaperAssinatura & JSXBase.HTMLAttributes<HTMLNopaperAssinaturaElement>;
             "nopaper-detalhes-assinatura": LocalJSX.NopaperDetalhesAssinatura & JSXBase.HTMLAttributes<HTMLNopaperDetalhesAssinaturaElement>;
+            "nopaper-documentos-natureza-pasta-link": LocalJSX.NopaperDocumentosNaturezaPastaLink & JSXBase.HTMLAttributes<HTMLNopaperDocumentosNaturezaPastaLinkElement>;
         }
     }
 }
