@@ -41,7 +41,7 @@
   "dependencies": {
     "@betha-plataforma/theme-bootstrap4": "^1.1.0",
     "bootstrap": "4.5.3",
-    "typescript": "^4.8.4"
+    "typescript": "^2.8.1"
   },
   "keywords": [
     "nopaper",
