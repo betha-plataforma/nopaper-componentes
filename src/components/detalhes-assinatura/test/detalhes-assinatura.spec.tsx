@@ -9,7 +9,7 @@ import {
 } from '../../../../test/utils/spec.helper';
 import { getMockAuthorization } from '../../../global/test/base-api.helper';
 import { DetalhesAssinatura } from '../detalhes-assinatura';
-import { PAYLOAD, PAYLOAD_EMPY } from './helper/detalhes-assinatura.helper';
+import { PAYLOAD, PAYLOAD_EMPY, PAYLOAD_ASSINATURAS_ARQUIVO } from './helper/detalhes-assinatura.helper';
 
 describe('nopaper-detalhes-assinatura', () => {
 
@@ -190,6 +190,34 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.row:nth-child(3)').textContent)
             .toMatch('Não existem seções de assinatura');
+    });
+
+    it('exibe assinaturas presentes no arquivo quando houver', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD_ASSINATURAS_ARQUIVO);
+
+        // Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('small').textContent)
+          .toMatch('Enviado em 01/08/2021 às 15:05');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').textContent)
+          .toMatch('Lorem Ipsum');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(2)').textContent)
+          .toMatch('lorem.ipsum');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(3)').textContent)
+          .toMatch('01/08/2021às 15:06:00');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(4)').textContent)
+          .toMatch('Assinatura realizada');
+        expect(detalhesAssinaturaElement.shadowRoot.getElementById('arquivoAssinaturasSectionId'))
+          .toBeTruthy();
     });
 
 });
