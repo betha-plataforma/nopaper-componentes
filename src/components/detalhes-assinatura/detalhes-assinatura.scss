@@ -109,14 +109,7 @@
 
   .arquivo-assinaturas-container {
     color: #595959;
+    max-height: 110px;
+    overflow-y: auto;
   }
-
-  .assinante {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 300px;
-    max-width: 300px;
-  }
-
 }
