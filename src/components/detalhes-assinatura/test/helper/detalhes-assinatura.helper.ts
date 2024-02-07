@@ -71,6 +71,8 @@ export const PAYLOAD =
 export const PAYLOAD_ASSINATURAS_ARQUIVO =
   {
       content: [{
+          id: '0000',
+          urlDownloadFront: 'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado',
           protocolo: '00000000-1111-2222-3333-4444444444',
           nomeArquivo: 'Lorem Ipsum',
           createdIn: '2021-08-01T15:05:00',

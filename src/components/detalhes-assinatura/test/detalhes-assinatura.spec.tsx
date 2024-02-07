@@ -9,7 +9,7 @@ import {
 } from '../../../../test/utils/spec.helper';
 import { getMockAuthorization } from '../../../global/test/base-api.helper';
 import { DetalhesAssinatura } from '../detalhes-assinatura';
-import { PAYLOAD, PAYLOAD_EMPY, PAYLOAD_ASSINATURAS_ARQUIVO } from './helper/detalhes-assinatura.helper';
+import { PAYLOAD, PAYLOAD_ASSINATURAS_ARQUIVO, PAYLOAD_EMPY } from './helper/detalhes-assinatura.helper';
 
 describe('nopaper-detalhes-assinatura', () => {
 
@@ -229,6 +229,54 @@ describe('nopaper-detalhes-assinatura', () => {
             .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
+    it('Deve mostrar bloco com assinaturas do arquivo abaixo do nome com link para o assinador', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD_ASSINATURAS_ARQUIVO);
+
+        //Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').href)
+          .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
+
+
+        let arquivoAssinaturas = detalhesAssinaturaElement.shadowRoot.getElementById('arquivoAssinaturasSectionId');
+        expect(arquivoAssinaturas).toBeTruthy()
+        expect(arquivoAssinaturas.textContent).toContain('ASSINANTE DOCUMENTO:00000001010101');
+    });
+
+    it('Deve mostrar bloco com assinaturas do arquivo abaixo do nome com link para o documento', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD_ASSINATURAS_ARQUIVO);
+
+        //Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = false;
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').href)
+          .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444');
+
+
+        let arquivoAssinaturas = detalhesAssinaturaElement.shadowRoot.getElementById('arquivoAssinaturasSectionId');
+        expect(arquivoAssinaturas).toBeTruthy()
+        expect(arquivoAssinaturas.textContent).toContain('ASSINANTE DOCUMENTO:00000001010101');
+    });
+
     it('copia link para o assinador para a área de transferência', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
@@ -251,34 +299,6 @@ describe('nopaper-detalhes-assinatura', () => {
         const copyButton = detalhesAssinaturaElement.shadowRoot.querySelector('div.link-documento__copy-button div') as HTMLButtonElement;
         await copyButton.click();
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
-    });
-
-    it('exibe assinaturas presentes no arquivo quando houver', async () => {
-        // Arrange
-        setFetchMockData(PAYLOAD_ASSINATURAS_ARQUIVO);
-
-        // Act
-        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
-
-        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
-        detalhesAssinaturaElement.authorization = getMockAuthorization();
-        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
-        await page.waitForChanges();
-
-        // Assert
-        detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('small').textContent)
-          .toMatch('Enviado em 01/08/2021 às 15:05');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').textContent)
-          .toMatch('Lorem Ipsum');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(2)').textContent)
-          .toMatch('lorem.ipsum');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(3)').textContent)
-          .toEqualText('01/08/2021 às 15:06:00');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(4)').textContent)
-          .toMatch('Assinatura realizada');
-        expect(detalhesAssinaturaElement.shadowRoot.getElementById('arquivoAssinaturasSectionId'))
-          .toBeTruthy();
     });
 
 });
