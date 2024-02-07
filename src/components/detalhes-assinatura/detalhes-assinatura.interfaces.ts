@@ -47,5 +47,9 @@ export const situacaoAssinatura = new Map<string, any>([
     ['EXPIRADA', {
         css: 'badge d-block badge-danger',
         descricao: 'Assinatura expirada'
+    }],
+    ['IGNORADO', {
+        css: 'badge d-block',
+        descricao: 'Assinatura descartada'
     }]
 ]);

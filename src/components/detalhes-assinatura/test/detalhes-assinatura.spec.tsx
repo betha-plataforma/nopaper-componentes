@@ -18,7 +18,8 @@ describe('nopaper-detalhes-assinatura', () => {
     const ENVJS = {
         suite: {
             'assinador': { v1: { host: 'https://plataforma-assinador.test.betha.cloud/assinador/v1' } },
-            'usuarios': { v1: { host: 'https://plataforma-usuarios.test.betha.cloud/usuarios/v0.1' } }
+            'usuarios': { v1: { host: 'https://plataforma-usuarios.test.betha.cloud/usuarios/v0.1' } },
+            'assinador-ui': { ferramenta: { host: 'https://assinador.test.plataforma.betha.cloud' } }
         }
     };
 
@@ -169,7 +170,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(2)').textContent)
             .toMatch('lorem.ipsum');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(3)').textContent)
-            .toMatch('01/08/2021às 15:06:00');
+            .toEqualText('01/08/2021 às 15:06:00');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(4)').textContent)
             .toMatch('Assinatura realizada');
     });
@@ -190,6 +191,66 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.row:nth-child(3)').textContent)
             .toMatch('Não existem seções de assinatura');
+    });
+
+    it('exibe link para o documento', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        // Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').href)
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444');
+    });
+
+    it('exibe link para o assinador', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        // Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').href)
+            .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
+    });
+
+    it('copia link para o assinador para a área de transferência', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+        Object.assign(navigator, {
+            clipboard: {
+                writeText: jest.fn(),
+            },
+        });
+
+        // Act
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        const copyButton = detalhesAssinaturaElement.shadowRoot.querySelector('div.link-documento__copy-button div') as HTMLButtonElement;
+        await copyButton.click();
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
     it('exibe assinaturas presentes no arquivo quando houver', async () => {
@@ -213,7 +274,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(2)').textContent)
           .toMatch('lorem.ipsum');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(3)').textContent)
-          .toMatch('01/08/2021às 15:06:00');
+          .toEqualText('01/08/2021 às 15:06:00');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('table tr td:nth-child(4)').textContent)
           .toMatch('Assinatura realizada');
         expect(detalhesAssinaturaElement.shadowRoot.getElementById('arquivoAssinaturasSectionId'))

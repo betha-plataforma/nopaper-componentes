@@ -14,7 +14,10 @@ export namespace Components {
         "accessToken": string;
         "assinaturaBaseUrl": string;
         "authorization": AuthorizationConfig;
+        "exibirLinkPara": string;
+        "frontAssinadorBaseUrl": string;
         "invalidProtocoloMessage": string;
+        "linkAssinador": boolean;
         "protocolo": string;
         "refresh": () => Promise<void>;
         "userAccess": string;
@@ -59,6 +62,10 @@ export namespace Components {
         "titulo": string;
     }
 }
+export interface NopaperDetalhesAssinaturaCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLNopaperDetalhesAssinaturaElement;
+}
 declare global {
     interface HTMLNopaperAssinaturaElement extends Components.NopaperAssinatura, HTMLStencilElement {
     }
@@ -92,7 +99,11 @@ declare namespace LocalJSX {
         "accessToken"?: string;
         "assinaturaBaseUrl"?: string;
         "authorization"?: AuthorizationConfig;
+        "exibirLinkPara"?: string;
+        "frontAssinadorBaseUrl"?: string;
         "invalidProtocoloMessage"?: string;
+        "linkAssinador"?: boolean;
+        "onLinkCopied"?: (event: NopaperDetalhesAssinaturaCustomEvent<string>) => void;
         "protocolo"?: string;
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;

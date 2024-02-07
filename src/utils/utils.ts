@@ -3,18 +3,24 @@ export function isNill(value: any): boolean {
     return value === null || value === undefined;
 }
 
-export function formatDate(dateString) {
+export function formatDate(dateString: string, withTime = true) {
     const isoDate = new Date(dateString);
     const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
     const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }`;
-    return `${ date } às ${ hours }`;
+    if (withTime) {
+        return `${ date } às ${ hours }`;
+    }
+    return date;
 }
 
 export function formatDateHtml(dateString) {
     const isoDate = new Date(dateString);
     const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
     const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }:${ addZero(isoDate.getSeconds()) }`;
-    return `<span>${ date }</span><br><small class="text-muted">às ${ hours }</small>`;
+    return `
+        <span class="fs-13">${ date }</span>
+        <small class="text-muted text-nowrap fs-12">às ${ hours }</small>
+    `;
 }
 
 function addZero(num) {

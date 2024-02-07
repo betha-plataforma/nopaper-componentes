@@ -9,7 +9,9 @@
   }
 
   h6 {
-    font-size: 1.09em;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
   }
 
   .unavailable img, .invalid img {
@@ -87,6 +89,29 @@
     height: 22px;
   }
 
+  .link-documento {
+
+    &__copy-button {
+      cursor: pointer;
+    }
+  }
+
+  .mw-95 {
+    max-width: 95%;
+  }
+
+  .fs-12 {
+    font-size: 12px;
+  }
+
+  .fs-13 {
+    font-size: 13px;
+    line-height: 1.4286;
+  }
+
+  .fw-600 {
+    font-weight: 600;
+  }
   .separator {
     display: flex;
     align-items: center;
