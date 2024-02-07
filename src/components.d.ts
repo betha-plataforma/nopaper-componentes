@@ -14,7 +14,10 @@ export namespace Components {
         "accessToken": string;
         "assinaturaBaseUrl": string;
         "authorization": AuthorizationConfig;
+        "exibirLinkPara": string;
+        "frontAssinadorBaseUrl": string;
         "invalidProtocoloMessage": string;
+        "linkAssinador": boolean;
         "protocolo": string;
         "refresh": () => Promise<void>;
         "userAccess": string;
@@ -92,7 +95,11 @@ declare namespace LocalJSX {
         "accessToken"?: string;
         "assinaturaBaseUrl"?: string;
         "authorization"?: AuthorizationConfig;
+        "exibirLinkPara"?: string;
+        "frontAssinadorBaseUrl"?: string;
         "invalidProtocoloMessage"?: string;
+        "linkAssinador"?: boolean;
+        "onLinkCopied"?: (event: CustomEvent<string>) => void;
         "protocolo"?: string;
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;
