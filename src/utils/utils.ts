@@ -3,11 +3,14 @@ export function isNill(value: any): boolean {
     return value === null || value === undefined;
 }
 
-export function formatDate(dateString) {
+export function formatDate(dateString: string, withTime = true) {
     const isoDate = new Date(dateString);
     const date = `${ addZero(isoDate.getDate()) }/${ addZero(isoDate.getMonth() + 1) }/${ isoDate.getFullYear() }`;
     const hours = `${ addZero(isoDate.getHours()) }:${ addZero(isoDate.getMinutes()) }`;
-    return `${ date } às ${ hours }`;
+    if (withTime) {
+        return `${ date } às ${ hours }`;
+    }
+    return date;
 }
 
 export function formatDateHtml(dateString) {

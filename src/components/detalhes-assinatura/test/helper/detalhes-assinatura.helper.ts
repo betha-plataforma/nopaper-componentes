@@ -67,6 +67,36 @@ export const PAYLOAD =
     }
     ]
 };
+
+export const PAYLOAD_ASSINATURAS_ARQUIVO =
+  {
+      content: [{
+          id: '0000',
+          urlDownloadFront: 'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado',
+          protocolo: '00000000-1111-2222-3333-4444444444',
+          nomeArquivo: 'Lorem Ipsum',
+          createdIn: '2021-08-01T15:05:00',
+          arquivoAssinaturas: [
+              {
+                  assinante: 'ASSINANTE DOCUMENTO:00000001010101',
+                  dataAssinatura: '2024-01-01T15:06:00',
+                  hashValido: true,
+                  certificadoExpirado: false,
+              }
+          ],
+          secoesAssinaturas: [
+              {
+                  assinantes: [{
+                      usuario: 'lorem.ipsum',
+                      situacaoAssinatura: {value: 'ASSINADO'},
+                      dataSituacao: '2021-08-01T15:06:00'
+                  }]
+              }
+          ]
+      }
+      ]
+  };
+
 export const PAYLOAD_EMPY =
 {
     content: [{

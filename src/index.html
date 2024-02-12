@@ -34,12 +34,6 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="pb-3 pt-3" style="border: 1px solid yellow; height: 100%">
-                            <nopaper-detalhes-assinatura id="documentos" link-assinador exibir-link-para="gabriel.freitas">
-                            </nopaper-detalhes-assinatura>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
                         <div style="border: 1px solid green" class="p-3">
                             <table class="table table-hover table-card table-responsive">
                                 <thead>
@@ -229,11 +223,5 @@
         handleUnauthorizedAccess: handleUnauthorizedAccess,
     };
     // setInterval(() => document.querySelector('nopaper-detalhes-assinatura').refresh(), 2000);
-    document.querySelector('nopaper-detalhes-assinatura#documentos').protocolo = "67931ef5-da63-477f-8d92-fd671c3447c1";
-    document.querySelector('nopaper-detalhes-assinatura#documentos').authorization = {
-        getAuthorization: getAuthorization,
-        handleUnauthorizedAccess: handleUnauthorizedAccess,
-    };
-    document.querySelector('nopaper-detalhes-assinatura#documentos').addEventListener('linkCopied', event => console.warn(event.detail));
 </script>
 </html>

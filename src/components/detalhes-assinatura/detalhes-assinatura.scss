@@ -112,4 +112,29 @@
   .fw-600 {
     font-weight: 600;
   }
+  .separator {
+    display: flex;
+    align-items: center;
+    color: #767676;
+    text-align: left;
+    margin: 10px 0;
+  }
+
+  .separator:after,
+  .separator:before{
+    content: "";
+    flex-grow: 1;
+    background: #D8D8D8;
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  .arquivo-assinaturas-container {
+    color: #595959;
+    max-height: 110px;
+    overflow-y: auto;
+  }
 }
