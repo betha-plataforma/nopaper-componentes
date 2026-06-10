@@ -646,7 +646,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 </td>
                 <td class="p-1">
                     { (assinante.dataAssinatura && assinante.situacaoAssinatura === 'ASSINADO')
-                        ? (<div class="d-flex flex-column flex-md-row" innerHTML={ assinante.dataAssinatura }></div>)
+                        ? (<div class="d-flex flex-column text-nowrap" innerHTML={ assinante.dataAssinatura }></div>)
                         : (<span>--</span>) }
                 </td>
                 <td>
