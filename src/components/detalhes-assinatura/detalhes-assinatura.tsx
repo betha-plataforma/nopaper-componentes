@@ -3,7 +3,12 @@ import { Component, Event, EventEmitter, h, Method, Prop, State, Watch } from '@
 import { isValidAuthorizationConfig } from '../../global/base-api';
 import { Authorization, AuthorizationConfig } from '../../global/interfaces';
 import { formatDate, formatDateHtml, isNill } from '../../utils/utils';
-import { DetalhesAssinaturaProps, situacaoAssinatura } from './detalhes-assinatura.interfaces';
+import {
+    DetalhesAssinaturaProps,
+    DocumentoDetalhe,
+    situacaoAssinatura,
+    VarianteLinkAssinador
+} from './detalhes-assinatura.interfaces';
 import { DetalhesAssinaturaService } from './detalhes-assinatura.service';
 
 @Component({
@@ -19,6 +24,10 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      *
      */
     @Event() linkCopied: EventEmitter<string>;
+    /**
+     *
+     */
+    @Event() documentoCarregado: EventEmitter<DocumentoDetalhe>;
 
     @State() loading = false;
     @State() unavailable = false;
@@ -66,6 +75,10 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      *
      */
     @Prop() readonly frontAssinadorBaseUrl: string;
+    /**
+     *
+     */
+    @Prop() readonly varianteLinkAssinador: VarianteLinkAssinador = 'nome-arquivo';
 
     private _protocolo: string;
     private _authorization: AuthorizationConfig;
@@ -129,15 +142,18 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     this.getNotFoundDocumento()
                 )}
                 { (this.documento) && (
-                    <div class="container-fluid">
+                    <div class={ this.isVarianteAtalhos() ? 'container-fluid container-fluid--compacto' : 'container-fluid' }>
                         { this.getHeaderDocumento() }
-                        { (!this.linkAssinador) && (this.getLinkDocumento()) }
-                        { (this.linkAssinador) && (this.getLinkAssinador()) }
+                        { (!this.isVarianteAtalhos() && !this.linkAssinador) && (this.getLinkDocumento()) }
+                        { (!this.isVarianteAtalhos() && this.linkAssinador) && (this.getLinkAssinador()) }
                         { (!this.documento.assinantes || this.documento.assinantes && this.documento.assinantes.length === 0) && (
                             this.getEmptyAssinantes()
                         )}
                         { (this.documento.assinantes && this.documento.assinantes.length > 0) && (
                             this.getTableSecoesAssinaturas(this.documento.assinantes)
+                        )}
+                        { (this.isVarianteAtalhos() && this.documento.arquivoAssinaturas?.length) && (
+                            this.getAssinaturasArquivo(this.documento.arquivoAssinaturas)
                         )}
                     </div>
                 )}
@@ -258,6 +274,25 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             ? this.transformaDocumento(pageDocumento.content[0])
             : undefined;
         this.loading = false;
+        this.emitirDocumentoCarregado();
+    }
+
+    private emitirDocumentoCarregado() {
+        if (isNill(this.documento)) {
+            return;
+        }
+        this.documentoCarregado.emit({
+            id: this.documento.id,
+            nome: this.documento.nome,
+            tipo: this.documento.tipo,
+            situacao: this.documento.situacao,
+            participante: this.isParticipante(),
+            urlDownloadFront: this.documento.urlDownloadFront
+        });
+    }
+
+    private isParticipante(): boolean {
+        return !isNill(this.exibirLinkPara) && !!this.isUserInAssinantes();
     }
 
     private onResponse(response) {
@@ -295,7 +330,11 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     private transformaDocumento(documento) {
         return {
+            id: documento.id,
             nome: documento.nomeArquivo,
+            tipo: documento.tipo,
+            situacao: this.getSituacaoDocumento(documento),
+            urlDownloadFront: documento.urlDownloadFront,
             criadoEm: formatDate(documento.createdIn),
             arquivoAssinaturas: documento.arquivoAssinaturas,
             assinantes: documento.secoesAssinaturas && documento.secoesAssinaturas.length
@@ -307,6 +346,14 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 ? this.getLinkDocumentoAssinador(documento.id)
                 : this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF')
         };
+    }
+
+    private getSituacaoDocumento(documento): string | undefined {
+        const situacao = documento && documento.situacao;
+        if (isNill(situacao)) {
+            return undefined;
+        }
+        return typeof situacao === 'string' ? situacao : situacao.value;
     }
 
     private async copyLink() {
@@ -419,14 +466,20 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         );
     }
 
+    private isVarianteAtalhos(): boolean {
+        return this.linkAssinador && this.varianteLinkAssinador === 'atalhos';
+    }
+
     private getHeaderDocumento() {
         return (
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between detalhes-assinatura__header">
                 <div class="d-flex flex-column">
-                    <h6 class="mb-0">Lista de assinantes</h6>
+                    <h6 class="mb-0">
+                        { this.isVarianteAtalhos() ? 'Detalhes do processo de assinatura' : 'Lista de assinantes' }
+                    </h6>
                     <small class="text-muted">Enviado em { this.documento.criadoEm }</small>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex align-items-start">
                     { (!this.linkAssinador) && (
                         <button class="btn btn-link" onClick={ this._fetch } disabled={ this.loading }>
                             <span class="d-flex">
@@ -437,7 +490,35 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                             </span>
                         </button>
                     )}
+                    { (this.isVarianteAtalhos() && (isNill(this.exibirLinkPara) || this.isUserInAssinantes())) && (
+                        this.getAtalhosLinkAssinador()
+                    )}
                 </div>
+            </div>
+        );
+    }
+
+    private getAtalhosLinkAssinador() {
+        return (
+            <div class="d-flex link-assinador-atalhos">
+                <a href={ this.documento.downloadUrl } target="_blank" rel="noopener noreferrer" class="btn btn-link text-primary d-flex align-items-center p-0 mr-2" title="Visualizar no Assinador">
+                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                    </svg>
+                    Visualizar no Assinador
+                </a>
+                <button class="btn btn-link text-secondary d-flex align-items-center p-0" onClick={ this._copyLink } title="Copiar link">
+                    { !this._linkCopied ? (
+                        <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                        </svg>
+                    ) : (
+                        <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="#54a668" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
+                        </svg>
+                    )}
+                    Copiar link
+                </button>
             </div>
         );
     }
@@ -565,7 +646,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 </td>
                 <td class="p-1">
                     { (assinante.dataAssinatura && assinante.situacaoAssinatura === 'ASSINADO')
-                        ? (<div class="d-flex flex-md-wrap" innerHTML={ assinante.dataAssinatura }></div>)
+                        ? (<div class="d-flex flex-column flex-md-row" innerHTML={ assinante.dataAssinatura }></div>)
                         : (<span>--</span>) }
                 </td>
                 <td>

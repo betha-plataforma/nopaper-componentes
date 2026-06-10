@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AuthorizationConfig } from "./global/interfaces";
+import { DocumentoDetalhe, VarianteLinkAssinador } from "./components/detalhes-assinatura/detalhes-assinatura.interfaces";
 export namespace Components {
     interface NopaperAssinatura {
         "situacao": string;
@@ -22,6 +23,7 @@ export namespace Components {
         "refresh": () => Promise<void>;
         "userAccess": string;
         "usuariosBaseUrl": string;
+        "varianteLinkAssinador": VarianteLinkAssinador;
     }
     interface NopaperDocumentosNaturezaPastaLink {
         /**
@@ -103,10 +105,12 @@ declare namespace LocalJSX {
         "frontAssinadorBaseUrl"?: string;
         "invalidProtocoloMessage"?: string;
         "linkAssinador"?: boolean;
+        "onDocumentoCarregado"?: (event: NopaperDetalhesAssinaturaCustomEvent<DocumentoDetalhe>) => void;
         "onLinkCopied"?: (event: NopaperDetalhesAssinaturaCustomEvent<string>) => void;
         "protocolo"?: string;
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;
+        "varianteLinkAssinador"?: VarianteLinkAssinador;
     }
     interface NopaperDocumentosNaturezaPastaLink {
         /**

@@ -301,4 +301,125 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
+    it('emite o evento documentoCarregado com os dados resolvidos do documento', async () => {
+        // Arrange
+        const PAYLOAD_TIPO_SITUACAO = {
+            content: [{
+                id: '0000',
+                tipo: 'PDF',
+                situacao: 'ASSINADO',
+                urlDownloadFront: 'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao',
+                protocolo: '00000000-1111-2222-3333-4444444444',
+                nomeArquivo: 'Lorem Ipsum',
+                createdIn: '2021-08-01T15:05:00',
+                secoesAssinaturas: [{ assinantes: [{ usuario: 'lorem.ipsum', situacaoAssinatura: { value: 'ASSINADO' }, dataSituacao: '2021-08-01T15:06:00' }] }]
+            }]
+        };
+        setFetchMockData(PAYLOAD_TIPO_SITUACAO);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+
+        const eventoSpy = jest.fn();
+        detalhesAssinaturaElement.addEventListener('documentoCarregado', eventoSpy);
+
+        // Act
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(eventoSpy).toHaveBeenCalledTimes(1);
+        expect(eventoSpy.mock.calls[0][0].detail).toEqual({
+            id: '0000',
+            nome: 'Lorem Ipsum',
+            tipo: 'PDF',
+            situacao: 'ASSINADO',
+            participante: true,
+            urlDownloadFront: 'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao'
+        });
+    });
+
+    it('emite documentoCarregado com participante=false quando o usuário não é assinante', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+
+        const eventoSpy = jest.fn();
+        detalhesAssinaturaElement.addEventListener('documentoCarregado', eventoSpy);
+
+        // Act
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.exibirLinkPara = 'outro.usuario';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(eventoSpy).toHaveBeenCalledTimes(1);
+        expect(eventoSpy.mock.calls[0][0].detail.participante).toBe(false);
+    });
+
+    it('variante atalhos exibe os atalhos "Visualizar no Assinador" e "Copiar link"', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        let detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.varianteLinkAssinador = 'atalhos';
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        const texto = detalhesAssinaturaElement.shadowRoot.textContent;
+        expect(texto).toMatch('Detalhes do processo de assinatura');
+        expect(texto).toMatch('Visualizar no Assinador');
+        expect(texto).toMatch('Copiar link');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos a').getAttribute('href'))
+            .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
+    });
+
+    it('variante atalhos NÃO exibe os atalhos para quem não é participante', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.varianteLinkAssinador = 'atalhos';
+        detalhesAssinaturaElement.exibirLinkPara = 'outro.usuario';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos')).toBeNull();
+    });
+
+    it('variante default (arquivo) preserva "Lista de assinantes" e o card do nome do arquivo', async () => {
+        // Arrange
+        setFetchMockData(PAYLOAD);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch('Lista de assinantes');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos')).toBeNull();
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').textContent).toMatch('Lorem Ipsum');
+    });
+
 });

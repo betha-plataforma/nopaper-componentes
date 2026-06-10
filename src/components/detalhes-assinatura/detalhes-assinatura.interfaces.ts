@@ -11,6 +11,17 @@ export interface DetalhesAssinaturaProps {
     invalidProtocoloMessage: string;
 }
 
+export type VarianteLinkAssinador = 'nome-arquivo' | 'atalhos';
+
+export interface DocumentoDetalhe {
+    id: string;
+    nome: string;
+    tipo?: string;
+    situacao?: string;
+    participante: boolean;
+    urlDownloadFront?: string;
+}
+
 export const situacaoAssinatura = new Map<string, any>([
     ['ASSINADO', {
         css: 'badge d-block badge-success',
