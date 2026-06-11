@@ -22,6 +22,9 @@
     "generate": "stencil generate",
     "lint": "eslint --ext .js,.ts,.tsx src/"
   },
+  "resolutions": {
+    "node-releases": "2.0.44"
+  },
   "devDependencies": {
     "@mdi/font": "~5.0.45",
     "@stencil/core": "2.19.2-0",
