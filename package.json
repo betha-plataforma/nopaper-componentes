@@ -23,7 +23,8 @@
     "lint": "eslint --ext .js,.ts,.tsx src/"
   },
   "resolutions": {
-    "node-releases": "2.0.44"
+    "node-releases": "2.0.44",
+    "@types/node": "16.18.126"
   },
   "devDependencies": {
     "@mdi/font": "~5.0.45",
