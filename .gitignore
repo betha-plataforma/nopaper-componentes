@@ -6,7 +6,6 @@ loader/
 *.sw[mnpcod]
 *.log
 *.lock
-!yarn.lock
 *.tmp
 *.tmp.*
 log.txt
