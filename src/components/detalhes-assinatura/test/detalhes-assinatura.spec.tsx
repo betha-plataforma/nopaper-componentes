@@ -378,6 +378,36 @@ describe('nopaper-detalhes-assinatura', () => {
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
     });
 
+    it('PDF sem nenhuma assinatura: link do arquivo baixa o original e exibe a tag "Original"', async () => {
+        // Arrange — ninguém assinou ainda: a cópia de impressão não existe, baixa o original
+        const PAYLOAD_PDF_SEM_ASSINATURA = JSON.parse(JSON.stringify(PAYLOAD));
+        PAYLOAD_PDF_SEM_ASSINATURA.content[0].tipo = 'PDF';
+        PAYLOAD_PDF_SEM_ASSINATURA.content[0].situacao = { value: 'AGUARDANDO_ACEITE' };
+        PAYLOAD_PDF_SEM_ASSINATURA.content[0].secoesAssinaturas = [{
+            assinantes: [{
+                usuario: 'lorem.ipsum',
+                situacaoAssinatura: { value: 'PENDENTE' },
+                dataSituacao: '2021-08-01T15:06:00'
+            }]
+        }];
+        setFetchMockData(PAYLOAD_PDF_SEM_ASSINATURA);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.varianteLinkAssinador = 'atalhos';
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
+            .toEqualText('Original');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-original?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+    });
+
     it('variante atalhos copia o link para o Assinador ao clicar em "Copiar link"', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
