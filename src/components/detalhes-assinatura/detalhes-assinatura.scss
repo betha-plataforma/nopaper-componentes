@@ -111,8 +111,35 @@
     }
   }
 
+  .link-assinador-atalhos {
+    align-items: center;
+    margin-top: 0;
+    white-space: nowrap;
+
+    .btn-link {
+      font-size: 13px;
+      text-transform: none;
+    }
+  }
+
+  .tag-tipo-download {
+    background-color: #e4e7eb;
+    border-radius: 10rem;
+    color: #3f4146;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 5px 10px;
+    white-space: nowrap;
+  }
+
   @media (max-width: 768px) {
     .container-fluid--compacto {
+      .detalhes-assinatura__header {
+        flex-direction: column;
+      }
+
       table.table-card tbody {
         max-height: 45vh;
       }
@@ -120,6 +147,17 @@
       table.table-card > tbody > tr {
         border-left: 0;
         border-right: 0;
+      }
+    }
+
+    .link-assinador-atalhos {
+      align-items: flex-start;
+      flex-direction: column;
+      margin-top: 8px;
+      row-gap: 4px;
+
+      .btn-link {
+        margin-right: 0 !important;
       }
     }
 

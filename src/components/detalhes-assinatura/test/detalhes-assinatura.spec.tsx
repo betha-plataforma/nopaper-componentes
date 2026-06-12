@@ -301,7 +301,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
-    it('variante atalhos exibe o card de download do documento e o botão de copiar link do Assinador', async () => {
+    it('variante atalhos exibe o card de download, os atalhos "Abrir no Assinador" e "Copiar link" e a tag do arquivo', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
 
@@ -318,15 +318,43 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
         const texto = detalhesAssinaturaElement.shadowRoot.textContent;
         expect(texto).toMatch('Detalhes do processo de assinatura');
-        expect(texto).not.toMatch('Visualizar no Assinador');
+        expect(texto).toMatch('Abrir no Assinador');
+        expect(texto).toMatch('Copiar link');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos a').getAttribute('href'))
+            .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
         const linkDocumento = detalhesAssinaturaElement.shadowRoot.querySelector('.card a');
         expect(linkDocumento.textContent).toMatch('Lorem Ipsum');
         expect(linkDocumento.getAttribute('href'))
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('button[title="Copiar link para o Assinador"]')).not.toBeNull();
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
+            .toEqualText('Assinado');
     });
 
-    it('variante atalhos copia o link para o Assinador ao clicar no botão de copiar', async () => {
+    it('exibe a tag "Cópia para impressão" quando o link do arquivo aponta para a cópia de impressão', async () => {
+        // Arrange
+        const PAYLOAD_COPIA_IMPRESSAO = JSON.parse(JSON.stringify(PAYLOAD));
+        PAYLOAD_COPIA_IMPRESSAO.content[0].tipo = 'PDF';
+        PAYLOAD_COPIA_IMPRESSAO.content[0].urlDownloadFront =
+            'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao';
+        setFetchMockData(PAYLOAD_COPIA_IMPRESSAO);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.varianteLinkAssinador = 'atalhos';
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
+            .toEqualText('Cópia para impressão');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+    });
+
+    it('variante atalhos copia o link para o Assinador ao clicar em "Copiar link"', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
         Object.assign(navigator, {
@@ -346,14 +374,14 @@ describe('nopaper-detalhes-assinatura', () => {
 
         // Act
         const copyButton = detalhesAssinaturaElement.shadowRoot
-            .querySelector('button[title="Copiar link para o Assinador"]') as HTMLButtonElement;
+            .querySelector('.link-assinador-atalhos button') as HTMLButtonElement;
         await copyButton.click();
 
         // Assert
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
-    it('variante atalhos NÃO exibe o botão de copiar para quem não é participante, mas mantém o card de download', async () => {
+    it('variante atalhos NÃO exibe os atalhos para quem não é participante, mas mantém o card de download', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
 
@@ -367,7 +395,7 @@ describe('nopaper-detalhes-assinatura', () => {
         await page.waitForChanges();
 
         // Assert
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('button[title="Copiar link para o Assinador"]')).toBeNull();
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos')).toBeNull();
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').textContent).toMatch('Lorem Ipsum');
     });
 
@@ -404,7 +432,7 @@ describe('nopaper-detalhes-assinatura', () => {
 
         // Assert
         expect(detalhesAssinaturaElement.shadowRoot.textContent).toMatch('Lista de assinantes');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('button[title="Copiar link para o Assinador"]')).toBeNull();
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.link-assinador-atalhos')).toBeNull();
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('a').textContent).toMatch('Lorem Ipsum');
     });
 
