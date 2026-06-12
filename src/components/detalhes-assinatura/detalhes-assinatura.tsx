@@ -320,18 +320,37 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             downloadUrl: this.linkAssinador
                 ? this.getLinkDocumentoAssinador(documento.id)
                 : this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF'),
-            arquivoUrl: this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF'),
-            tagArquivo: this.getTagArquivo(documento.urlDownloadFront)
+            arquivoUrl: this.getDownloadUrlDocumento(this.getUrlArquivo(documento), documento.tipo === 'PDF'),
+            tagArquivo: this.getTagArquivo(documento)
         };
     }
 
-    private getTagArquivo(urlDownloadFront: string): string | undefined {
-        if (isNill(urlDownloadFront)) {
+    private isDocumentoPdf(documento): boolean {
+        return documento.tipo === 'PDF';
+    }
+
+    private isDocumentoAssinado(documento): boolean {
+        return this.getSituacaoDocumento(documento) === 'ASSINADO';
+    }
+
+    // Para PDFs, o link do arquivo não segue o urlDownloadFront do backend: assinado
+    // baixa o documento assinado e em andamento baixa a cópia de impressão. Demais
+    // tipos não possuem cópia de impressão e mantêm o urlDownloadFront.
+    private getUrlArquivo(documento): string {
+        if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
+            return documento.urlDownloadFront;
+        }
+        const base = documento.urlDownloadFront.substring(0, documento.urlDownloadFront.lastIndexOf('/'));
+        return this.isDocumentoAssinado(documento)
+            ? `${ base }/download-assinado`
+            : `${ base }/download-copia-impressao`;
+    }
+
+    private getTagArquivo(documento): string | undefined {
+        if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
             return undefined;
         }
-        return urlDownloadFront.endsWith('download-copia-impressao')
-            ? 'Cópia para impressão'
-            : 'Assinado';
+        return this.isDocumentoAssinado(documento) ? 'Assinado' : 'Cópia para impressão';
     }
 
     private getSituacaoDocumento(documento): string | undefined {

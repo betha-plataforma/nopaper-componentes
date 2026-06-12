@@ -301,7 +301,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
-    it('variante atalhos exibe o card de download, os atalhos "Abrir no Assinador" e "Copiar link" e a tag do arquivo', async () => {
+    it('variante atalhos exibe o card de download e os atalhos "Abrir no Assinador" e "Copiar link"; não-PDF não tem tag', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
 
@@ -324,19 +324,43 @@ describe('nopaper-detalhes-assinatura', () => {
             .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
         const linkDocumento = detalhesAssinaturaElement.shadowRoot.querySelector('.card a');
         expect(linkDocumento.textContent).toMatch('Lorem Ipsum');
+        // Documento sem tipo (não-PDF): mantém o urlDownloadFront e não exibe tag
         expect(linkDocumento.getAttribute('href'))
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
-            .toEqualText('Assinado');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download')).toBeNull();
     });
 
-    it('exibe a tag "Cópia para impressão" quando o link do arquivo aponta para a cópia de impressão', async () => {
-        // Arrange
-        const PAYLOAD_COPIA_IMPRESSAO = JSON.parse(JSON.stringify(PAYLOAD));
-        PAYLOAD_COPIA_IMPRESSAO.content[0].tipo = 'PDF';
-        PAYLOAD_COPIA_IMPRESSAO.content[0].urlDownloadFront =
+    it('PDF assinado: link do arquivo baixa o documento assinado e exibe a tag "Assinado"', async () => {
+        // Arrange — backend manda copia-impressao para assinado+PDF; o componente troca para download-assinado
+        const PAYLOAD_PDF_ASSINADO = JSON.parse(JSON.stringify(PAYLOAD));
+        PAYLOAD_PDF_ASSINADO.content[0].tipo = 'PDF';
+        PAYLOAD_PDF_ASSINADO.content[0].situacao = { value: 'ASSINADO' };
+        PAYLOAD_PDF_ASSINADO.content[0].urlDownloadFront =
             'https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao';
-        setFetchMockData(PAYLOAD_COPIA_IMPRESSAO);
+        setFetchMockData(PAYLOAD_PDF_ASSINADO);
+
+        await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
+        const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
+        detalhesAssinaturaElement.linkAssinador = true;
+        detalhesAssinaturaElement.varianteLinkAssinador = 'atalhos';
+        detalhesAssinaturaElement.exibirLinkPara = 'lorem.ipsum';
+        detalhesAssinaturaElement.authorization = getMockAuthorization();
+        detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
+        await page.waitForChanges();
+
+        // Assert
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
+            .toEqualText('Assinado');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+    });
+
+    it('PDF não assinado: link do arquivo baixa a cópia de impressão e exibe a tag "Cópia para impressão"', async () => {
+        // Arrange — backend manda download-assinado enquanto não assinado; o componente troca para copia-impressao
+        const PAYLOAD_PDF_EM_ANDAMENTO = JSON.parse(JSON.stringify(PAYLOAD));
+        PAYLOAD_PDF_EM_ANDAMENTO.content[0].tipo = 'PDF';
+        PAYLOAD_PDF_EM_ANDAMENTO.content[0].situacao = { value: 'AGUARDANDO_ACEITE' };
+        setFetchMockData(PAYLOAD_PDF_EM_ANDAMENTO);
 
         await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
         const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
