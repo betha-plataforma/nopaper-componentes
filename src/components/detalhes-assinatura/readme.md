@@ -24,10 +24,9 @@
 
 ## Events
 
-| Event                | Description | Type                            |
-| -------------------- | ----------- | ------------------------------- |
-| `documentoCarregado` |             | `CustomEvent<DocumentoDetalhe>` |
-| `linkCopied`         |             | `CustomEvent<string>`           |
+| Event        | Description | Type                  |
+| ------------ | ----------- | --------------------- |
+| `linkCopied` |             | `CustomEvent<string>` |
 
 
 ## Methods
