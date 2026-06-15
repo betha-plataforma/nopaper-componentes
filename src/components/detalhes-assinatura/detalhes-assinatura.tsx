@@ -363,7 +363,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return undefined;
         }
         if (this.isDocumentoAssinado(documento)) {
-            return 'Assinado';
+            return 'Assinado (PAdES)';
         }
         return this.isAlguemAssinou(documento) ? 'Cópia para impressão' : 'Original';
     }
