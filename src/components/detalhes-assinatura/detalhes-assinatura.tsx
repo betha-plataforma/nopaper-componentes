@@ -333,11 +333,18 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         return this.getSituacaoDocumento(documento) === 'ASSINADO';
     }
 
+    private isAlguemAssinou(documento): boolean {
+        return (documento.secoesAssinaturas || [])
+            .flatMap(secaoAssinatura => secaoAssinatura.assinantes || [])
+            .some(assinante => (assinante.situacaoAssinatura?.value || assinante.situacaoAssinatura) === 'ASSINADO');
+    }
+
     private getUrlArquivo(documento): string {
         if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
             return documento.urlDownloadFront;
         }
-        return `${ this.getBaseUrlArquivo(documento) }/download-copia-impressao`;
+        const endpoint = this.isAlguemAssinou(documento) ? 'download-copia-impressao' : 'download-original';
+        return `${ this.getBaseUrlArquivo(documento) }/${ endpoint }`;
     }
 
     private getUrlArquivoAssinado(documento): string | undefined {

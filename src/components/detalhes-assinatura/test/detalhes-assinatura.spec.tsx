@@ -381,7 +381,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
-    it('PDF sem nenhuma assinatura: link do arquivo baixa a cópia de impressão e não exibe o botão de assinado', async () => {
+    it('PDF sem nenhuma assinatura: link do arquivo baixa o original e não exibe o botão de assinado', async () => {
         // Arrange — ninguém assinou ainda: a cópia de impressão não existe, baixa o original
         const PAYLOAD_PDF_SEM_ASSINATURA = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_SEM_ASSINATURA.content[0].tipo = 'PDF';
@@ -404,9 +404,9 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert — o link aponta sempre para a cópia de impressão e não há botão de assinado
+        // Assert — sem nenhuma assinatura a cópia ainda não existe: link cai no original e não há botão de assinado
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
-            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-original?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
