@@ -321,7 +321,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                 ? this.getLinkDocumentoAssinador(documento.id)
                 : this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF'),
             arquivoUrl: this.getDownloadUrlDocumento(this.getUrlArquivo(documento), documento.tipo === 'PDF'),
-            tagArquivo: this.getTagArquivo(documento)
+            arquivoAssinadoUrl: this.getUrlArquivoAssinado(documento)
         };
     }
 
@@ -333,39 +333,22 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         return this.getSituacaoDocumento(documento) === 'ASSINADO';
     }
 
-    private isAlguemAssinou(documento): boolean {
-        return (documento.secoesAssinaturas || [])
-            .flatMap(secaoAssinatura => secaoAssinatura.assinantes || [])
-            .some(assinante => (assinante.situacaoAssinatura?.value || assinante.situacaoAssinatura) === 'ASSINADO');
-    }
-
-    // Para PDFs, o link do arquivo não segue o urlDownloadFront do backend: assinado
-    // baixa o documento assinado, em andamento baixa a cópia de impressão e sem
-    // nenhuma assinatura baixa o original (a cópia de impressão só existe depois da
-    // primeira assinatura). Demais tipos mantêm o urlDownloadFront.
     private getUrlArquivo(documento): string {
         if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
             return documento.urlDownloadFront;
         }
-        const base = documento.urlDownloadFront.substring(0, documento.urlDownloadFront.lastIndexOf('/'));
-        return `${ base }/${ this.getEndpointArquivo(documento) }`;
+        return `${ this.getBaseUrlArquivo(documento) }/download-copia-impressao`;
     }
 
-    private getEndpointArquivo(documento): string {
-        if (this.isDocumentoAssinado(documento)) {
-            return 'download-assinado';
-        }
-        return this.isAlguemAssinou(documento) ? 'download-copia-impressao' : 'download-original';
-    }
-
-    private getTagArquivo(documento): string | undefined {
-        if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
+    private getUrlArquivoAssinado(documento): string | undefined {
+        if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento) || !this.isDocumentoAssinado(documento)) {
             return undefined;
         }
-        if (this.isDocumentoAssinado(documento)) {
-            return 'Assinado (PAdES)';
-        }
-        return this.isAlguemAssinou(documento) ? 'Cópia para impressão' : 'Original';
+        return this.getDownloadUrlDocumento(`${ this.getBaseUrlArquivo(documento) }/download-assinado`, true);
+    }
+
+    private getBaseUrlArquivo(documento): string {
+        return documento.urlDownloadFront.substring(0, documento.urlDownloadFront.lastIndexOf('/'));
     }
 
     private getSituacaoDocumento(documento): string | undefined {
@@ -510,7 +493,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                             </span>
                         </button>
                     )}
-                    { (this.isVarianteAtalhos() && (isNill(this.exibirLinkPara) || this.isUserInAssinantes())) && (
+                    { (this.isVarianteAtalhos() && this.isUserInAssinantes()) && (
                         this.getAtalhosLinkAssinador()
                     )}
                 </div>
@@ -562,8 +545,13 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                                         </div>
                                     </div>
                                 </a>
-                                { (this.documento.tagArquivo) && (
-                                    <span class="tag-tipo-download ml-2">{ this.documento.tagArquivo }</span>
+                                { (this.documento.arquivoAssinadoUrl) && (
+                                    <a href={ this.documento.arquivoAssinadoUrl } target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-abrir-assinado ml-2" title="Abrir assinado (PAdES)">
+                                        <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                            <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                        </svg>
+                                        Abrir assinado (PAdES)
+                                    </a>
                                 )}
                             </div>
                             { (exibirAssinaturasArquivo && this.documento.arquivoAssinaturas?.length) && (

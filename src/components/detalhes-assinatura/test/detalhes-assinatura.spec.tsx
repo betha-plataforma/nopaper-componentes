@@ -301,7 +301,7 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
     });
 
-    it('variante atalhos exibe o card de download e os atalhos "Abrir no Assinador" e "Copiar link"; não-PDF não tem tag', async () => {
+    it('variante atalhos exibe o card de download e os atalhos "Abrir no Assinador" e "Copiar link"', async () => {
         // Arrange
         setFetchMockData(PAYLOAD);
 
@@ -324,13 +324,12 @@ describe('nopaper-detalhes-assinatura', () => {
             .toEqualText('https://assinador.test.plataforma.betha.cloud/#/informacoes/documento/0000');
         const linkDocumento = detalhesAssinaturaElement.shadowRoot.querySelector('.card a');
         expect(linkDocumento.textContent).toMatch('Lorem Ipsum');
-        // Documento sem tipo (não-PDF): mantém o urlDownloadFront e não exibe tag
+        // Documento sem tipo (não-PDF): mantém o urlDownloadFront
         expect(linkDocumento.getAttribute('href'))
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444');
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download')).toBeNull();
     });
 
-    it('PDF assinado: link do arquivo baixa o documento assinado e exibe a tag "Assinado"', async () => {
+    it('PDF assinado: link do arquivo baixa a cópia de impressão e exibe o botão "Abrir assinado (PAdES)"', async () => {
         // Arrange — backend manda copia-impressao para assinado+PDF; o componente troca para download-assinado
         const PAYLOAD_PDF_ASSINADO = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_ASSINADO.content[0].tipo = 'PDF';
@@ -348,14 +347,19 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
-            .toEqualText('Assinado');
+        // Assert — o nome do arquivo aponta para a cópia de impressão...
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download')).toBeNull();
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+        // ...e o botão "Abrir assinado (PAdES)" abre o documento assinado em nova aba
+        const botaoAssinado = detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado');
+        expect(botaoAssinado.textContent).toMatch('Abrir assinado (PAdES)');
+        expect(botaoAssinado.getAttribute('href'))
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+        expect(botaoAssinado.getAttribute('target')).toEqualText('_blank');
     });
 
-    it('PDF não assinado: link do arquivo baixa a cópia de impressão e exibe a tag "Cópia para impressão"', async () => {
+    it('PDF não assinado: link do arquivo baixa a cópia de impressão', async () => {
         // Arrange — backend manda download-assinado enquanto não assinado; o componente troca para copia-impressao
         const PAYLOAD_PDF_EM_ANDAMENTO = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_EM_ANDAMENTO.content[0].tipo = 'PDF';
@@ -371,14 +375,13 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
-            .toEqualText('Cópia para impressão');
+        // Assert — sem todas as assinaturas, não há botão de assinado, só a cópia de impressão
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
             .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
-    it('PDF sem nenhuma assinatura: link do arquivo baixa o original e exibe a tag "Original"', async () => {
+    it('PDF sem nenhuma assinatura: link do arquivo baixa a cópia de impressão e não exibe o botão de assinado', async () => {
         // Arrange — ninguém assinou ainda: a cópia de impressão não existe, baixa o original
         const PAYLOAD_PDF_SEM_ASSINATURA = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_SEM_ASSINATURA.content[0].tipo = 'PDF';
@@ -401,11 +404,10 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert
-        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.tag-tipo-download').textContent)
-            .toEqualText('Original');
+        // Assert — o link aponta sempre para a cópia de impressão e não há botão de assinado
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
-            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-original?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+        expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
     it('variante atalhos copia o link para o Assinador ao clicar em "Copiar link"', async () => {
