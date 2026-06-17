@@ -1,6 +1,6 @@
 {
   "name": "@betha-plataforma/nopaper-componentes",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Coleção de Web Components NoPaper",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -21,6 +21,10 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "lint": "eslint --ext .js,.ts,.tsx src/"
+  },
+  "resolutions": {
+    "node-releases": "2.0.44",
+    "@types/node": "16.18.126"
   },
   "devDependencies": {
     "@mdi/font": "~5.0.45",
