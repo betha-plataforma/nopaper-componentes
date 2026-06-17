@@ -11,8 +11,6 @@ export interface DetalhesAssinaturaProps {
     invalidProtocoloMessage: string;
 }
 
-export type VarianteLinkAssinador = 'nome-arquivo' | 'atalhos';
-
 export const situacaoAssinatura = new Map<string, any>([
     ['ASSINADO', {
         css: 'badge d-block badge-success',

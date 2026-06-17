@@ -5,8 +5,7 @@ import { Authorization, AuthorizationConfig } from '../../global/interfaces';
 import { formatDate, formatDateHtml, isNill } from '../../utils/utils';
 import {
     DetalhesAssinaturaProps,
-    situacaoAssinatura,
-    VarianteLinkAssinador
+    situacaoAssinatura
 } from './detalhes-assinatura.interfaces';
 import { DetalhesAssinaturaService } from './detalhes-assinatura.service';
 
@@ -70,10 +69,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
      *
      */
     @Prop() readonly frontAssinadorBaseUrl: string;
-    /**
-     *
-     */
-    @Prop() readonly varianteLinkAssinador: VarianteLinkAssinador = 'nome-arquivo';
 
     private _protocolo: string;
     private _authorization: AuthorizationConfig;
@@ -137,18 +132,14 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                     this.getNotFoundDocumento()
                 )}
                 { (this.documento) && (
-                    <div class={ this.isVarianteAtalhos() ? 'container-fluid container-fluid--compacto' : 'container-fluid' }>
+                    <div class={ this.linkAssinador ? 'container-fluid container-fluid--compacto' : 'container-fluid' }>
                         { this.getHeaderDocumento() }
-                        { (!this.linkAssinador || this.isVarianteAtalhos()) && (this.getLinkDocumento(!this.isVarianteAtalhos())) }
-                        { (!this.isVarianteAtalhos() && this.linkAssinador) && (this.getLinkAssinador()) }
+                        { this.getLinkDocumento() }
                         { (!this.documento.assinantes || this.documento.assinantes && this.documento.assinantes.length === 0) && (
                             this.getEmptyAssinantes()
                         )}
                         { (this.documento.assinantes && this.documento.assinantes.length > 0) && (
-                            this.getTableSecoesAssinaturas(this.documento.assinantes)
-                        )}
-                        { (this.isVarianteAtalhos() && this.documento.arquivoAssinaturas?.length) && (
-                            this.getAssinaturasArquivo(this.documento.arquivoAssinaturas)
+                            this.getTableSecoesAssinaturas(this.documento.assinantes, this.documento.arquivoAssinaturas)
                         )}
                     </div>
                 )}
@@ -476,31 +467,27 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         );
     }
 
-    private isVarianteAtalhos(): boolean {
-        return this.linkAssinador && this.varianteLinkAssinador === 'atalhos';
-    }
-
     private getHeaderDocumento() {
         return (
             <div class="d-flex justify-content-between detalhes-assinatura__header">
                 <div class="d-flex flex-column">
                     <h6 class="mb-0">
-                        { this.isVarianteAtalhos() ? 'Detalhes do processo de assinatura' : 'Lista de assinantes' }
+                        { this.linkAssinador ? 'Detalhes do processo de assinatura' : 'Lista de assinantes' }
                     </h6>
                     <small class="text-muted">Enviado em { this.documento.criadoEm }</small>
                 </div>
                 <div class="d-flex align-items-start">
                     { (!this.linkAssinador) && (
-                        <button class="btn btn-link" onClick={ this._fetch } disabled={ this.loading }>
+                        <button class="btn btn-link text-capitalize" onClick={ this._fetch } disabled={ this.loading }>
                             <span class="d-flex">
                                 <svg viewBox="0 0 24 24" width="16" height="16">
                                     <path fill="currentColor" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
                                 </svg>
-                                ATUALIZAR
+                                <span class="ml-1">Atualizar</span>
                             </span>
                         </button>
                     )}
-                    { (this.isVarianteAtalhos() && this.isUserInAssinantes()) && (
+                    { (this.linkAssinador && (isNill(this.exibirLinkPara) || this.isUserInAssinantes())) && (
                         this.getAtalhosLinkAssinador()
                     )}
                 </div>
@@ -511,13 +498,14 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
     private getAtalhosLinkAssinador() {
         return (
             <div class="d-flex link-assinador-atalhos">
-                <a href={ this.documento.downloadUrl } target="_blank" rel="noopener noreferrer" class="btn btn-link text-primary d-flex align-items-center p-0 mr-2" title="Abrir no Assinador">
+                <a href={ this.documento.downloadUrl } target="_blank" rel="noopener noreferrer" class="d-flex align-items-center mr-md-3 mb-2 mb-md-0 ml-2 ml-md-0 text-decoration-none" title="Abrir no Assinador">
                     <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                         <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
                     </svg>
-                    Abrir no Assinador
+                    <span class="d-none d-md-block">Assinador</span>
+                    <span class="d-block d-md-none">Visualizar no Assinador</span>
                 </a>
-                <button class="btn btn-link text-secondary d-flex align-items-center p-0" onClick={ this._copyLink } title="Copiar link">
+                <a class="text-secondary text-decoration-none d-flex align-items-center ml-2 ml-md-0" onClick={ this._copyLink } title="Copiar link">
                     { !this._linkCopied ? (
                         <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                             <path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
@@ -528,94 +516,47 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                         </svg>
                     )}
                     Copiar link
-                </button>
+                </a>
             </div>
         );
     }
 
-    private getLinkDocumento(exibirAssinaturasArquivo = true) {
+    private getLinkDocumento() {
         return (
             <div class="row">
                 <div class="col">
                     <div class="card border-0 bg-secondary mb-2 mt-2">
                         <div class="card-body">
-                            <div class="d-inline-flex align-items-center justify-content-between w-100 mw-100">
-                                <a href={ this.documento.arquivoUrl } target="_blank" class="mw-95" title={ this.documento.nome }>
-                                    {/*<i class="mdi mdi-file-document-outline mr-1"></i>*/}
-                                    {/*Usando svg porque shadow dom não tem suporte a custom fonts*/}
-                                    <div class="d-inline-flex mw-100">
-                                        <svg class="mr-1" viewBox="0 0 24 24" width="16" height="16">
-                                            <path fill="currentColor" d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
-                                        </svg>
-                                        <div class="text-truncate">
-                                            { this.documento.nome }
-                                        </div>
-                                    </div>
-                                </a>
-                                { (this.documento.arquivoAssinadoUrl) && (
-                                    <a href={ this.documento.arquivoAssinadoUrl } target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-abrir-assinado ml-2" title="Abrir assinado (PAdES)">
-                                        <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
-                                            <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-                                        </svg>
-                                        Abrir assinado (PAdES)
-                                    </a>
-                                )}
-                            </div>
-                            { (exibirAssinaturasArquivo && this.documento.arquivoAssinaturas?.length) && (
-                              this.getAssinaturasArquivo(this.documento.arquivoAssinaturas)
-                            ) }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    private getLinkAssinador() {
-        return (
-            <div class="row">
-                <div class="col">
-                    <div class="card border-0 bg-secondary mb-2 mt-2">
-                        <div class="card-body">
-                            { (isNill(this.exibirLinkPara) || this.isUserInAssinantes()) ? (
-                                <div class="d-inline-flex align-items-center justify-content-between w-100 mw-100">
-                                    <a href={ this.documento.downloadUrl } target="_blank" class="mw-95" title={ this.documento.nome }>
-                                        <div class="d-inline-flex mw-100">
-                                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
-                                                <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-                                            </svg>
+                            <div class="d-flex align-items-center justify-content-md-between w-100 flex-md-row flex-column">
+                                <div class="d-flex w-100 justify-content-center justify-content-md-start text-truncate mb-2 mb-md-0">
+                                    <a href={ this.documento.arquivoUrl } target="_blank" class="mw-95 text-decoration-none" title={ this.documento.nome }>
+                                        {/*<i class="mdi mdi-file-document-outline mr-1"></i>*/}
+                                        {/*Usando svg porque shadow dom não tem suporte a custom fonts*/}
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <svg class="mr-1" viewBox="0 0 24 24" width="16" height="16">
+                                                    <path fill="currentColor" d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                                                </svg>
+                                            </div>
                                             <div class="text-truncate">
                                                 { this.documento.nome }
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="link-documento__copy-button">
-                                        { !this._linkCopied ? (
-                                            <div onClick={ this._copyLink }>
-                                                <svg class="ml-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
-                                                    <path fill="#595959" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-                                                </svg>
-                                            </div>
-                                        ) : (
-                                            <svg class="ml-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
-                                                <path fill="#54a668" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
+                                </div>
+                                { (this.documento.arquivoAssinadoUrl) && (
+                                    <div class="d-flex w-xs-100">
+                                        <a href={ this.documento.arquivoAssinadoUrl } target="_blank" rel="noopener noreferrer"
+                                           class="btn btn-primary btn-abrir-assinado text-decoration-none flex-grow-1 flex-md-grow-0"
+                                           title={ "Abrir assinado" + (this.documento.tipo === 'PDF' && (' (PAdES)')) }>
+                                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                                <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
                                             </svg>
-                                        )}
+                                            Abrir assinado { this.documento.tipo === 'PDF' && ('(PAdES)') }
+                                        </a>
                                     </div>
-                                </div>
-                            ) : (
-                                <div class="d-flex flex-nowrap">
-                                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
-                                        <path fill="currentColor" d="M9.75 20.85C11.53 20.15 11.14 18.22 10.24 17C9.35 15.75 8.12 14.89 6.88 14.06C6 13.5 5.19 12.8 4.54 12C4.26 11.67 3.69 11.06 4.27 10.94C4.86 10.82 5.88 11.4 6.4 11.62C7.31 12 8.21 12.44 9.05 12.96L10.06 11.26C8.5 10.23 6.5 9.32 4.64 9.05C3.58 8.89 2.46 9.11 2.1 10.26C1.78 11.25 2.29 12.25 2.87 13.03C4.24 14.86 6.37 15.74 7.96 17.32C8.3 17.65 8.71 18.04 8.91 18.5C9.12 18.94 9.07 18.97 8.6 18.97C7.36 18.97 5.81 18 4.8 17.36L3.79 19.06C5.32 20 7.88 21.47 9.75 20.85M20.84 5.25C21.06 5.03 21.06 4.67 20.84 4.46L19.54 3.16C19.33 2.95 18.97 2.95 18.76 3.16L17.74 4.18L19.82 6.26M11 10.92V13H13.08L19.23 6.85L17.15 4.77L11 10.92Z" />
-                                    </svg>
-                                    <div class="text-truncate" title={ this.documento.nome }>
-                                        { this.documento.nome }
-                                    </div>
-                                </div>
-                            )}
-                            { (this.documento.arquivoAssinaturas?.length) && (
-                              this.getAssinaturasArquivo(this.documento.arquivoAssinaturas)
-                            ) }
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -623,7 +564,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         );
     }
 
-    private getTableSecoesAssinaturas(assinantes) {
+    private getTableSecoesAssinaturas(assinantes, assinaturasPreExistentes) {
         return (
             <div class="row">
                 <div class="col">
@@ -639,6 +580,19 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
                             </thead>
                             <tbody>
                                 { assinantes.map((assinante, index) => this.getRowAssinante(assinante, index))}
+                                {(!!assinaturasPreExistentes && assinaturasPreExistentes.length > 0) && (
+                                    <tr>
+                                        <td></td>
+                                        <td class="separator">
+                                            <span>Assinaturas pré-existentes</span>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                )}
+                                {(!!assinaturasPreExistentes && assinaturasPreExistentes.length > 0) && (
+                                    assinaturasPreExistentes.map(assinatura => this.getRowAssinaturaPreExistente(assinatura))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -689,30 +643,28 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
         );
     }
 
-    private getAssinaturasArquivo(assinaturas) {
+    private getRowAssinaturaPreExistente(assinatura) {
         return (
-          <div id="arquivoAssinaturasSectionId">
-              <div class="separator">
-                  <div class="ml-4 mr-4">O documento possui as assinaturas abaixo</div>
-              </div>
-              <div class="d-flex flex-column arquivo-assinaturas-container">
-                  { assinaturas.map(assinatura => (
-                    <div class="d-flex justify-content-between align-items-center">
+            <tr>
+                <td></td>
+                <td>
+                    <div class="d-flex align-items-center">
                         <div>
-                            <svg class="ml-1 mr-2" color="red" viewBox="0 0 24 24" width="16" height="16">
-                                <path
-                                  fill="#595959"
-                                  d="M9.75 20.85C11.53 20.15 11.14 18.22 10.24 17C9.35 15.75 8.12 14.89 6.88 14.06C6 13.5 5.19 12.8 4.54 12C4.26 11.67 3.69 11.06 4.27 10.94C4.86 10.82 5.88 11.4 6.4 11.62C7.31 12 8.21 12.44 9.05 12.96L10.06 11.26C8.5 10.23 6.5 9.32 4.64 9.05C3.58 8.89 2.46 9.11 2.1 10.26C1.78 11.25 2.29 12.25 2.87 13.03C4.24 14.86 6.37 15.74 7.96 17.32C8.3 17.65 8.71 18.04 8.91 18.5C9.12 18.94 9.07 18.97 8.6 18.97C7.36 18.97 5.81 18 4.8 17.36L3.79 19.06C5.32 20 7.88 21.47 9.75 20.85M18.96 7.33L13.29 13H11V10.71L16.67 5.03L18.96 7.33M22.36 6.55C22.35 6.85 22.04 7.16 21.72 7.47L19.2 10L18.33 9.13L20.93 6.54L20.34 5.95L19.67 6.62L17.38 4.33L19.53 2.18C19.77 1.94 20.16 1.94 20.39 2.18L21.82 3.61C22.06 3.83 22.06 4.23 21.82 4.47C21.61 4.68 21.41 4.88 21.41 5.08C21.39 5.28 21.59 5.5 21.79 5.67C22.08 5.97 22.37 6.25 22.36 6.55Z"/>
-                            </svg>
+                            <img class="rounded-circle"
+                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABVBAMAAADzvAQyAAAAA3NCSVQICAjb4U/gAAAAJFBMVEXv7+/r6+vn5+fj4+Pf39/b29vX19fS0tLOzs7KysrGxsbCwsLs/LKrAAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNS8yOC8xNZrgdoYAAAHdSURBVEiJ7dU7SwNBEADgE8Q6s3nY3h5q0sZCtIwgRDttDHYqoqRLEIJJ56tIHQh7tprcXWpB8uvcy+NuZ2/njATEIlN/zMzezs1aziJhWyu2Yr9kAMB+ZqFJOJ1xdnTbat0cQirj7NwNZPTPII1BNfCFjMCrMJrxwkhM4+0DUljdnzERXJKMF4K5Eu4ASHYSJZPpKhRj3VgJ95ERLK8kE+KDYHwTsSEQ7AAxv0ywY8wqf8IW7A0zj2IlzPhybAOxwZqZQRVnUyZTZTlXVcLtmdkOSiarGovyosaG3MhKGvPMbF9n5SWyOfkxPumn+aTQQelGDTPjRfXDuX3ishzAPyD1Z9nqITzbIRg6qzog2g5Rr2vgkCyn7JB3RjJlO6DdoC+ui3hxndJFlSEZcprFVXHNxIquzxlalomF356z5r9jEB2hkfZ8ZKMP8gTkLQCrRZ/XvwJi3iBbU67euwbjkEPuIVbS+fexixiHLaQmjoPGgO11sZIueN2dJZyxyXMr9HCj53fKIHsX+AkVTt3sIBMWtmVU0skG2ZRltrtjMwoLj19sFjJ7PdE8bvDZChlr07mm+ZrMtngpXUn3xW2LdYju4xg1M5a2v43pehlL39+mGNiWvr9NMVwxnX0DvhTtmYR25VcAAAAASUVORK5CYII="
+                                 alt={'Foto de ' + assinatura.assinante}/>
                         </div>
-                        <div class="text-truncate flex-grow-1" title={ assinatura.assinante }>
-                            { assinatura.assinante }
+                        <div class="text-truncate ml-2">
+                            <span class="d-block text-truncate fs-13">{assinatura.assinante}</span>
                         </div>
-                        <div class="text-nowrap" title={formatDate(assinatura.dataAssinatura, true)}>{ formatDate(assinatura.dataAssinatura, false) }</div>
                     </div>
-                  )) }
-              </div>
-          </div>
+                </td>
+                <td>
+                    <div class="d-flex flex-column text-nowrap"
+                         innerHTML={formatDateHtml(assinatura.dataAssinatura)}></div>
+                </td>
+                <td></td>
+            </tr>
         );
     }
 

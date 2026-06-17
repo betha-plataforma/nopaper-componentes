@@ -17,7 +17,7 @@
     <script type="module" src="/build/nopaper-componentes.esm.js"></script>
     <script nomodule src="/build/nopaper-componentes.js"></script>
 
-    <script src="https://suite.test.bethacloud.com.br/env.js"></script>
+    <script src="https://variaveis.test.plataforma.betha.cloud/env.js"></script>
 </head>
 <body>
 <div class="container">
@@ -218,6 +218,7 @@
     // document.querySelector('nopaper-detalhes-assinatura').accessToken = getAuthorization().accessToken;
     // document.querySelector('nopaper-detalhes-assinatura').userAccess = getAuthorization().userAccess;
     document.querySelector('nopaper-detalhes-assinatura').protocolo = '67931ef5-da63-477f-8d92-fd671c3447c1';
+    document.querySelector('nopaper-detalhes-assinatura').linkAssinador=true;
     document.querySelector('nopaper-detalhes-assinatura').authorization = {
         getAuthorization: getAuthorization,
         handleUnauthorizedAccess: handleUnauthorizedAccess,
