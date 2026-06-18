@@ -12,6 +12,11 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # e2e usa o Chrome pré-instalado do runner (PUPPETEER_EXECUTABLE_PATH),
+      # então pular o download do Chrome do puppeteer evita o hang no install.
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
 
     steps:
       - name: Checkout
