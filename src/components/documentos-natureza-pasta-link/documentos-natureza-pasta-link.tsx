@@ -134,7 +134,7 @@ export class DocumentosNaturezaPastaLink {
         if ('___bth' in window) {
             return (window as any)['___bth'].envs.suite.documentos['ui/v1'].host;
         }
-        throw '___bth deve estar definido em window';
+        throw new Error('___bth deve estar definido em window');
     }
 }
 
