@@ -6,6 +6,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # e2e usa o Chrome pré-instalado do runner (PUPPETEER_EXECUTABLE_PATH),
+      # então pular o download do Chrome do puppeteer evita o hang no install.
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
 
     steps:
       - name: Checkout
@@ -14,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "16"
+          node-version: "20"
 
       - name: Install
         run: yarn install --frozen-lockfile

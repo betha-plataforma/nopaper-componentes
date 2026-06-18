@@ -12,6 +12,11 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # e2e usa o Chrome pré-instalado do runner (PUPPETEER_EXECUTABLE_PATH),
+      # então pular o download do Chrome do puppeteer evita o hang no install.
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
 
     steps:
       - name: Checkout
@@ -20,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '16'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           scope: '@betha-plataforma'
 
@@ -37,4 +42,6 @@ jobs:
         run: yarn build
 
       - name: Publish
-        run: npm publish --access public
+        run: |
+          npm install -g npm@11.5.1
+          npm publish --access public
