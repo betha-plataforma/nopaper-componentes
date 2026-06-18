@@ -20,12 +20,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '16'
           registry-url: 'https://registry.npmjs.org'
           scope: '@betha-plataforma'
 
       - name: Install
         run: yarn install --frozen-lockfile
+
+      - name: Use runner's pre-installed Chrome for e2e
+        run: echo "PUPPETEER_EXECUTABLE_PATH=${CHROME_BIN:-/usr/bin/google-chrome}" >> "$GITHUB_ENV"
 
       - name: Test
         run: yarn test
@@ -35,3 +38,5 @@ jobs:
 
       - name: Publish
         run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
