@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AuthorizationConfig } from "./global/interfaces";
+export { AuthorizationConfig } from "./global/interfaces";
 export namespace Components {
     interface NopaperAssinatura {
         "situacao": string;
@@ -62,6 +63,10 @@ export namespace Components {
         "titulo": string;
     }
 }
+export interface NopaperDetalhesAssinaturaCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLNopaperDetalhesAssinaturaElement;
+}
 declare global {
     interface HTMLNopaperAssinaturaElement extends Components.NopaperAssinatura, HTMLStencilElement {
     }
@@ -99,7 +104,7 @@ declare namespace LocalJSX {
         "frontAssinadorBaseUrl"?: string;
         "invalidProtocoloMessage"?: string;
         "linkAssinador"?: boolean;
-        "onLinkCopied"?: (event: CustomEvent<string>) => void;
+        "onLinkCopied"?: (event: NopaperDetalhesAssinaturaCustomEvent<string>) => void;
         "protocolo"?: string;
         "userAccess"?: string;
         "usuariosBaseUrl"?: string;

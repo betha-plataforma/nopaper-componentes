@@ -230,7 +230,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return this.assinaturaBaseUrl;
         }
         if ('___bth' in window) {
-            return window['___bth'].envs.suite.assinador.v1.host;
+            return (window as any)['___bth'].envs.suite.assinador.v1.host;
         }
         return null;
     }
@@ -240,7 +240,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return this.usuariosBaseUrl;
         }
         if ('___bth' in window) {
-            return window['___bth'].envs.suite.usuarios.v1.host;
+            return (window as any)['___bth'].envs.suite.usuarios.v1.host;
         }
         return null;
     }
@@ -250,7 +250,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             return this.frontAssinadorBaseUrl;
         }
         if ('___bth' in window) {
-            return window['___bth'].envs.suite['assinador-ui'].ferramenta.host;
+            return (window as any)['___bth'].envs.suite['assinador-ui'].ferramenta.host;
         }
         return null;
     }
