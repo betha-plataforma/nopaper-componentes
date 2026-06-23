@@ -311,7 +311,7 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
             downloadUrl: this.linkAssinador
                 ? this.getLinkDocumentoAssinador(documento.id)
                 : this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF'),
-            arquivoUrl: this.getDownloadUrlDocumento(this.getUrlArquivo(documento), documento.tipo === 'PDF'),
+            arquivoUrl: this.getDownloadUrlDocumento(documento.urlDownloadFront, documento.tipo === 'PDF'),
             arquivoAssinadoUrl: this.getUrlArquivoAssinado(documento)
         };
     }
@@ -322,20 +322,6 @@ export class DetalhesAssinatura implements DetalhesAssinaturaProps {
 
     private isDocumentoAssinado(documento): boolean {
         return this.getSituacaoDocumento(documento) === 'ASSINADO';
-    }
-
-    private isAlguemAssinou(documento): boolean {
-        return (documento.secoesAssinaturas || [])
-            .flatMap(secaoAssinatura => secaoAssinatura.assinantes || [])
-            .some(assinante => (assinante.situacaoAssinatura?.value || assinante.situacaoAssinatura) === 'ASSINADO');
-    }
-
-    private getUrlArquivo(documento): string {
-        if (isNill(documento.urlDownloadFront) || !this.isDocumentoPdf(documento)) {
-            return documento.urlDownloadFront;
-        }
-        const endpoint = this.isAlguemAssinou(documento) ? 'download-copia-impressao' : 'download-original';
-        return `${ this.getBaseUrlArquivo(documento) }/${ endpoint }`;
     }
 
     private getUrlArquivoAssinado(documento): string | undefined {
