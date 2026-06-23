@@ -331,7 +331,7 @@ describe('nopaper-detalhes-assinatura', () => {
     });
 
     it('PDF assinado: link do arquivo baixa a cópia de impressão e exibe o botão "Abrir assinado (PAdES)"', async () => {
-        // Arrange — backend manda copia-impressao para assinado+PDF; o componente troca para download-assinado
+        // Arrange — assinado+PDF: o urlDownloadFront já vem como copia-impressao; o link do arquivo usa essa URL
         const PAYLOAD_PDF_ASSINADO = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_ASSINADO.content[0].tipo = 'PDF';
         PAYLOAD_PDF_ASSINADO.content[0].situacao = { value: 'ASSINADO' };
@@ -359,12 +359,14 @@ describe('nopaper-detalhes-assinatura', () => {
         expect(botaoAssinado.getAttribute('target')).toEqualText('_blank');
     });
 
-    it('PDF não assinado: link do arquivo baixa a cópia de impressão', async () => {
-        // Arrange — backend manda download-assinado enquanto não assinado; o componente troca para copia-impressao
-        const PAYLOAD_PDF_EM_ANDAMENTO = JSON.parse(JSON.stringify(PAYLOAD));
-        PAYLOAD_PDF_EM_ANDAMENTO.content[0].tipo = 'PDF';
-        PAYLOAD_PDF_EM_ANDAMENTO.content[0].situacao = { value: 'AGUARDANDO_ACEITE' };
-        setFetchMockData(PAYLOAD_PDF_EM_ANDAMENTO);
+    it('PDF parcialmente assinado (assinaturas pendentes): link segue o urlDownloadFront (download-assinado → original)', async () => {
+        // Arrange — PD-26485: documento com múltiplas assinaturas, uma realizada e as demais pendentes.
+        // Processo não concluído: o urlDownloadFront aponta para download-assinado (que serve o original);
+        // o componente não deve forçar a cópia de impressão só por já existir alguém que assinou.
+        const PAYLOAD_PDF_PARCIALMENTE_ASSINADO = JSON.parse(JSON.stringify(PAYLOAD));
+        PAYLOAD_PDF_PARCIALMENTE_ASSINADO.content[0].tipo = 'PDF';
+        PAYLOAD_PDF_PARCIALMENTE_ASSINADO.content[0].situacao = { value: 'PARCIALMENTE_ASSINADO' };
+        setFetchMockData(PAYLOAD_PDF_PARCIALMENTE_ASSINADO);
 
         await page.setContent('<nopaper-detalhes-assinatura></nopaper-detalhes-assinatura>');
         const detalhesAssinaturaElement: HTMLNopaperDetalhesAssinaturaElement = page.body.querySelector('nopaper-detalhes-assinatura');
@@ -374,14 +376,14 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert — sem todas as assinaturas, não há botão de assinado, só a cópia de impressão
+        // Assert — link segue o urlDownloadFront (download-assinado) e não há botão de assinado
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
-            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-copia-impressao?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
-    it('PDF sem nenhuma assinatura: link do arquivo baixa o original e não exibe o botão de assinado', async () => {
-        // Arrange — ninguém assinou ainda: a cópia de impressão não existe, baixa o original
+    it('PDF sem nenhuma assinatura: link segue o urlDownloadFront (download-assinado → original)', async () => {
+        // Arrange — ninguém assinou: o urlDownloadFront aponta para download-assinado, que serve o original
         const PAYLOAD_PDF_SEM_ASSINATURA = JSON.parse(JSON.stringify(PAYLOAD));
         PAYLOAD_PDF_SEM_ASSINATURA.content[0].tipo = 'PDF';
         PAYLOAD_PDF_SEM_ASSINATURA.content[0].situacao = { value: 'AGUARDANDO_ACEITE' };
@@ -402,9 +404,9 @@ describe('nopaper-detalhes-assinatura', () => {
         detalhesAssinaturaElement.protocolo = '67931ef5-da63-477f-8d92-fd671c3447c0';
         await page.waitForChanges();
 
-        // Assert — sem nenhuma assinatura a cópia ainda não existe: link cai no original e não há botão de assinado
+        // Assert — link segue o urlDownloadFront (download-assinado) e não há botão de assinado
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.card a').getAttribute('href'))
-            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-original?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
+            .toEqualText('https://plataforma-assinador.test.betha.cloud/assinador/v1/api-front/documentos/0000/download-assinado?access_token=00000000-1111-2222-3333-4444444444&disableDownload=true');
         expect(detalhesAssinaturaElement.shadowRoot.querySelector('.btn-abrir-assinado')).toBeNull();
     });
 
